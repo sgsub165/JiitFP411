@@ -121,7 +121,7 @@ public class Login {
 				else if (!adminFlag) {
 				
 					Connection connect = Dao.getConnection();
-				    String queryString = "SELECT uname, upass FROM sgriff_users where uname=? and upass=?";
+				    String queryString = "SELECT uname, upass FROM s_grif_users where uname=? and upass=?";
 					PreparedStatement ps;
 					ResultSet results = null;
 					try {

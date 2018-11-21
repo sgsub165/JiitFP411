@@ -43,8 +43,10 @@ public class Dao {
 
 	public void createTables() {
 		// variables for SQL Query table creations
-		final String createTicketsTable = "CREATE TABLE sgriff_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, ticket_issuer VARCHAR(30), ticket_description VARCHAR(200))";
-		final String createUsersTable = "CREATE TABLE sgriff_users(uid INT AUTO_INCREMENT PRIMARY KEY, uname VARCHAR(30), upass VARCHAR(30))";
+		final String createTicketsTable = "CREATE TABLE s_grif_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, "
+				+ "ticket_issuer VARCHAR(30), ticket_description VARCHAR(200))";
+		final String createUsersTable = "CREATE TABLE s_grif_users(uid INT AUTO_INCREMENT PRIMARY KEY, "
+				+ "uname VARCHAR(30), upass VARCHAR(30))";
 
 		try {
 
@@ -101,7 +103,7 @@ public class Dao {
 			// and PASS (insert) that data into your User table
 			for (List<String> rowData : array) {
 
-				sql = "insert into sgriff_users(uname,upass) " + "values('" + rowData.get(0) + "','" + rowData.get(1)
+				sql = "insert into s_grif_users(uname,upass) " + "values('" + rowData.get(0) + "','" + rowData.get(1)
 						+ "');";
 				statement.executeUpdate(sql);
 			}
@@ -115,5 +117,5 @@ public class Dao {
 		}
 	}
 	// add other desired CRUD methods needed like for updates, deletes, etc.
-	//DELETE FROM `fp411`.`sgriff_tickets` WHERE (`ticket_id` = '1');
+	//DELETE FROM `fp411`.`s_grif_tickets` WHERE (`ticket_id` = '1');
 }

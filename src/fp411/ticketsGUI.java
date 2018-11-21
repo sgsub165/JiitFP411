@@ -162,7 +162,7 @@ public class ticketsGUI implements ActionListener {
 				Statement statement = Dao.getConnection().createStatement();
  
 				int result = statement
-						.executeUpdate("Insert into sgriff_tickets(ticket_issuer, ticket_description) values(" + " '"
+						.executeUpdate("Insert into s_grif_tickets(ticket_issuer, ticket_description) values(" + " '"
 								+ ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
 
 				// retrieve ticket id number newly auto generated upon record insertion
@@ -191,7 +191,7 @@ public class ticketsGUI implements ActionListener {
 
 				Statement statement = Dao.getConnection().createStatement();
 
-				ResultSet results = statement.executeQuery("SELECT * FROM sgriff_tickets");
+				ResultSet results = statement.executeQuery("SELECT * FROM s_grif_tickets");
 
 				// Use JTable built in functionality to build a table model and
 				// display the table model off your result set!!!
