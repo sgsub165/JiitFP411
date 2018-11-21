@@ -33,7 +33,7 @@ public class Dao {
 		try {
 			connect = DriverManager
 					.getConnection("jdbc:mysql://localhost:3306/FP411?autoReconnect=true&useSSL=false"
-							+ "&user=root&password=eOncw7)obb");
+							+ "&user=sgriffit&password=sgriffit1");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
