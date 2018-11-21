@@ -1,3 +1,10 @@
+/** 
+* Name: Stephen Griffith
+* Date: 11/21/2018
+* Source File Name: Login.java
+* Lab: Final Project
+*/
+
 package fp411;
 
 import java.awt.Color;
