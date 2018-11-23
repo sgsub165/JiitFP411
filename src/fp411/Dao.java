@@ -25,7 +25,7 @@ public class Dao {
 
 	// constructor
 	public Dao() {
-	//createTables();
+	createTables();
 	}
 	 
 	public static Connection getConnection() {
