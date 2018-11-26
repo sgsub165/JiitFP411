@@ -20,25 +20,26 @@ import java.util.List;
 
 public class Dao {
 	// instance fields
-	static Connection connect = null;
-	Statement statement = null;
+	static Connection  cnct = null;
+	Statement stmnt = null;
 
 	// constructor
 	public Dao() {
-	createTables();
+		System.out.println("Welcome to the Trouble Ticket System\n");
+	//createTables();
 	}
 	 
 	public static Connection getConnection() {
 		// Setup the connection with the DB
 		try {
-			connect = DriverManager
+			cnct = DriverManager
 					.getConnection("jdbc:mysql://localhost:3306/FP411?autoReconnect=true&useSSL=false"
 							+ "&user=sgriffit&password=sgriffit1");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return connect;
+		return cnct;
 	}
 
 	public void createTables() {
@@ -52,16 +53,16 @@ public class Dao {
 
 			// execute queries to create tables
 
-			statement = getConnection().createStatement();
+			stmnt = getConnection().createStatement();
 
-			statement.executeUpdate(createTicketsTable);
-			statement.executeUpdate(createUsersTable);
+			stmnt.executeUpdate(createTicketsTable);
+			stmnt.executeUpdate(createUsersTable);
 			System.out.println("Created tables in given database...");
 
 			// end create table
 			// close connection/statement object
-			statement.close();
-			connect.close();
+			stmnt.close();
+			cnct.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
