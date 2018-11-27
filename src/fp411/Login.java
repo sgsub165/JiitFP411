@@ -17,7 +17,6 @@ import java.awt.event.WindowEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -37,10 +36,10 @@ public class Login {
 	private JFrame mainFrame;
 	private JLabel headerLabel;
 	private JLabel statusLabel;
-	private JLabel namelabel;
-	private JLabel passwordLabel;
+	private JLabel uidLabel;
+	private JLabel pwdLabel;
 	private JTextField userText;
-	private JPasswordField passwordText;
+	private JPasswordField pwdText;
 	private JButton loginButton;
 	private JPanel controlPanel;
 
@@ -84,10 +83,10 @@ public class Login {
 	private void showTextFields() {
 
 		// instantiate controls
-		namelabel = new JLabel("User ID: ", JLabel.RIGHT);
-		passwordLabel = new JLabel("Password: ", JLabel.CENTER);
+		uidLabel = new JLabel("User ID: ", JLabel.RIGHT);
+		pwdLabel = new JLabel("Password: ", JLabel.CENTER);
 		userText = new JTextField(6);
-		passwordText = new JPasswordField(6);
+		pwdText = new JPasswordField(6);
 
 		loginButton = new JButton("Login");
 		loginButton.addActionListener(new ActionListener() {
@@ -103,11 +102,11 @@ public class Login {
 				 * if you like.
 				 */
 				// Create user friendly variable name to store user name from text box
-				String userName = userText.getText();
+				String userId = userText.getText();
 				// convert characters from password field to string for input validation
-				String password = new String(passwordText.getPassword());
+				String password = new String(pwdText.getPassword());
 				boolean adminFlag = false;
-				if (userName.equals("admin") && password.equals("admin1")) {
+				if (userId.equals("admin") && password.equals("admin1")) {
 					adminFlag = true;
 					// close of Login window
 					mainFrame.dispose();
@@ -121,21 +120,21 @@ public class Login {
 				else if (!adminFlag) {
 				
 					Connection connect = Dao.getConnection();
-				    String queryString = "SELECT employee_user_id, employee_passwrd FROM s_grif_users where employee_user_id=? and employee_passwrd=?";
-					PreparedStatement ps;
+				    String selectStatement = "SELECT emp_user_id, emp_passwrd FROM s_grif_users where emp_user_id=? and emp_passwrd=?";
+					PreparedStatement prepstmnt;
 					ResultSet results = null;
 					try {
 						// set up prepared statements to execute query string cleanly and safely
-						ps = (PreparedStatement) connect.prepareStatement(queryString);
-						ps.setString(1, userName);
-						ps.setString(2, password);
-						results = ps.executeQuery();
+						prepstmnt = (PreparedStatement) connect.prepareStatement(selectStatement);
+						prepstmnt.setString(1, userId);
+						prepstmnt.setString(2, password);
+						results = prepstmnt.executeQuery();
 						if (results.next()) {   // verify if a record match exists
 							JOptionPane.showMessageDialog(null, "Username and Password exists");
 							// close of Login window
 							mainFrame.dispose();
 							// open up ticketsGUI file upon successful login
-							new ticketsGUI(userName);   // establish role as
+							new ticketsGUI(userId);   // establish role as
 														// regular user via
 														// constructor call
 						} else {
@@ -162,10 +161,10 @@ public class Login {
 		controlPanel.setLayout(new FlowLayout());
 		controlPanel.setBackground(Color.yellow);
 		// add controls to control panel
-		controlPanel.add(namelabel);
+		controlPanel.add(uidLabel);
 		controlPanel.add(userText);
-		controlPanel.add(passwordLabel);
-		controlPanel.add(passwordText);
+		controlPanel.add(pwdLabel);
+		controlPanel.add(pwdText);
 		controlPanel.add(loginButton);
 		// lastly, set visibility of Window as all controls are instantiated for frame
 		mainFrame.setVisible(true);

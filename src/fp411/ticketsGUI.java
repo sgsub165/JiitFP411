@@ -154,7 +154,8 @@ public class ticketsGUI implements ActionListener {
 			try {
 
 				// get ticket information
-				String ticketName = JOptionPane.showInputDialog(null, "Enter your name");
+				String submitterName = JOptionPane.showInputDialog(null, "Enter your Employee User ID");
+				String submitterDept = JOptionPane.showInputDialog(null, "Enter your Department ID");
 				String ticketDesc = JOptionPane.showInputDialog(null, "Enter a ticket description");
 
 				// insert ticket information to database
@@ -162,8 +163,12 @@ public class ticketsGUI implements ActionListener {
 				Statement statement = Dao.getConnection().createStatement();
  
 				int result = statement
-						.executeUpdate("Insert into s_grif_tickets(ticket_issuer, ticket_description) values(" + " '"
-								+ ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
+//						.executeUpdate("Insert into s_grif_tickets(ticket_issuer, ticket_description) values(" + " '"
+//								+ ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
+				
+					.executeUpdate("Insert into s_grif_tickets(emp_user_id, emp_dept_id, issue_description, submit_date) "
+							+ "values(" + " '" + submitterName + "','" + submitterDept + "','" + ticketDesc + "', now())", Statement.RETURN_GENERATED_KEYS);
+			
 
 				// retrieve ticket id number newly auto generated upon record insertion
 				ResultSet resultSet = null;
