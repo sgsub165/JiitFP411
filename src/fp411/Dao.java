@@ -44,10 +44,20 @@ public class Dao {
 
 	public void createTables() {
 		// variables for SQL Query table creations
+//		final String createTicketsTable = "CREATE TABLE s_grif_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, "
+//				+ "submitter_id VARCHAR(20) NOT NULL, submitter_dept_id VARCHAR(5) NOT NULL)";
+		
+
 		final String createTicketsTable = "CREATE TABLE s_grif_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, "
-				+ "ticket_issuer VARCHAR(30), ticket_description VARCHAR(200))";
-		final String createUsersTable = "CREATE TABLE s_grif_users(uid INT AUTO_INCREMENT PRIMARY KEY, "
-				+ "uname VARCHAR(30), upass VARCHAR(30))";
+				+ "submitter_id VARCHAR(20) NOT NULL, submitter_dept_id VARCHAR(10) NOT NULL, "
+				+ "submit_date DATE NOT NULL, issue_description VARCHAR(512) NOT NULL, "
+				+ "assigned_to_fix VARCHAR(20) NULL, issue_resolution_description VARCHAR(256) NULL, "
+				+ "resolution_date DATE NULL, target_release VARCHAR(10) NULL, "
+				+ "verification_description VARCHAR(256) NULL, verfication_date DATE NULL)";
+		
+		final String createUsersTable = "CREATE TABLE s_grif_users(employee_id INT AUTO_INCREMENT PRIMARY KEY, "
+				+ "employee_user_id VARCHAR(20) NOT NULL, employee_passwrd VARCHAR(30) NOT NULL, "
+				+ "employee_full_name VARCHAR(45), employee_department_id VARCHAR(10))";
 
 		try {
 
@@ -104,8 +114,8 @@ public class Dao {
 			// and PASS (insert) that data into your User table
 			for (List<String> rowData : array) {
 
-				sql = "insert into s_grif_users(uname,upass) " + "values('" + rowData.get(0) + "','" + rowData.get(1)
-						+ "');";
+				sql = "insert into s_grif_users(employee_user_id, employee_passwrd, employee_full_name, employee_department_id) " 
+				+ "values('" + rowData.get(0) + "','" + rowData.get(1) + "','" + rowData.get(2) + "','" + rowData.get(3) + "');";
 				statement.executeUpdate(sql);
 			}
 			System.out.println("Inserts completed in the given database...");
