@@ -58,7 +58,7 @@ public class ticketsGUI implements ActionListener {
 	public ticketsGUI(String verifyRole) {
 
 		chkIfAdmin = verifyRole; 
-		JOptionPane.showMessageDialog(null, "Welcome " + verifyRole);
+		JOptionPane.showMessageDialog(null, "Welcome " + verifyRole + " to the Trouble Ticket System");
 		if (chkIfAdmin.equals("Admin"))
 
 			dao.createTables(); // fire up table creations (tickets / user
@@ -133,7 +133,7 @@ public class ticketsGUI implements ActionListener {
 			}
 		});
 		// set frame options
-		mainFrame.setSize(400, 400);
+		mainFrame.setSize(800, 400);
 		mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);

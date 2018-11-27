@@ -49,15 +49,19 @@ public class Dao {
 		
 
 		final String createTicketsTable = "CREATE TABLE s_grif_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, "
-				+ "emp_user_id VARCHAR(20) NOT NULL, emp_dept_id VARCHAR(10) NOT NULL, "
+				+ "ticket_status VARCHAR(10), emp_user_id VARCHAR(20) NOT NULL, dept_name VARCHAR(10) NOT NULL, "
 				+ "submit_date DATE NOT NULL, issue_description VARCHAR(512) NOT NULL, "
-				+ "assigned_to_fix VARCHAR(20) NULL, issue_resolution_description VARCHAR(256) NULL, "
-				+ "resolution_date DATE NULL, target_release VARCHAR(10) NULL, "
-				+ "verification_description VARCHAR(256) NULL, verfication_date DATE NULL)";
+				+ "issue_resolution_description VARCHAR(256) NULL, resolution_date DATE NULL)";
 		
 		final String createUsersTable = "CREATE TABLE s_grif_users(employee_id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "emp_user_id VARCHAR(20) NOT NULL, emp_passwrd VARCHAR(30) NOT NULL, "
-				+ "emp_full_name VARCHAR(45), emp_dept_id VARCHAR(10))";
+				+ "emp_full_name VARCHAR(45), dept_name VARCHAR(10) NOT NULL)";
+		
+		final String createDeptTable = "CREATE TABLE s_grif_depts(dept_id INT AUTO_INCREMENT PRIMARY KEY, "
+				+ "dept_name VARCHAR(10))";
+		
+		final String createTicketStatusTable = "CREATE TABLE s_grif_tstatus(tstatus_id INT AUTO_INCREMENT PRIMARY KEY, "
+				+ "tstatus_name VARCHAR(10))";
 
 		try {
 
@@ -67,7 +71,9 @@ public class Dao {
 
 			stmnt.executeUpdate(createTicketsTable);
 			stmnt.executeUpdate(createUsersTable);
-			System.out.println("Created tables in given database...");
+			stmnt.executeUpdate(createDeptTable);
+			stmnt.executeUpdate(createTicketStatusTable);
+			System.out.println("Created tables in Trouble Ticket database...");
 
 			// end create table
 			// close connection/statement object
@@ -78,6 +84,8 @@ public class Dao {
 		}
 		// add users to user table
 		addUsers();
+		addDepts();
+		addTstatus();
 	}
 
 	public void addUsers() {
@@ -114,11 +122,11 @@ public class Dao {
 			// and PASS (insert) that data into your User table
 			for (List<String> rowData : array) {
 
-				sql = "insert into s_grif_users(emp_user_id, emp_passwrd, emp_full_name, emp_dept_id) " 
-				+ "values('" + rowData.get(0) + "','" + rowData.get(1) + "','" + rowData.get(2) + "','" + rowData.get(3) + "');";
+				sql = "INSERT INTO s_grif_users(emp_user_id, emp_passwrd, emp_full_name, dept_name) " 
+				+ "VALUES('" + rowData.get(0) + "','" + rowData.get(1) + "','" + rowData.get(2) + "','" + rowData.get(3) + "');";
 				statement.executeUpdate(sql);
 			}
-			System.out.println("Inserts completed in the given database...");
+			System.out.println("User inserts completed in the Trouble Ticket database.");
 
 			// close statement object
 			statement.close();
@@ -127,6 +135,70 @@ public class Dao {
 			System.out.println( e.getMessage());
 		}
 	}
+	
+	public void addDepts() {
+		String sql;
+		Statement statement;
+		//set up the DB connection
+		
+		try {
+			statement = getConnection().createStatement();
+			System.out.println("Successful connection to the Trouble Ticket database.");
+			
+			System.out.println("Inserting Departments into the Department table...");
+			
+			sql = "INSERT INTO s_grif_depts(dept_name)" + "VALUES('IT')";
+			statement.executeUpdate(sql);
+			sql = "INSERT INTO s_grif_depts(dept_name)" + "values('DEV')";
+			statement.executeUpdate(sql);
+			sql = "INSERT INTO s_grif_depts(dept_name)" + "values('TACS')";
+			statement.executeUpdate(sql);
+			sql = "INSERT INTO s_grif_depts(dept_name)" + "values('TEST')";
+			statement.executeUpdate(sql);
+			
+			System.out.println("Department inserts completed in the Trouble Ticket database.");
+			
+			statement.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void addTstatus() {
+		String sql;
+		Statement statement;
+		//set up the DB connection
+		
+		try {
+			statement = getConnection().createStatement();
+			System.out.println("Successful connection to the Trouble Ticket database.");
+			
+			System.out.println("Inserting Ticket Status into the Ticket Status table...");
+			
+			sql = "INSERT INTO s_grif_tstatus(tstatus_name)" + "VALUES('NEW')";
+			statement.executeUpdate(sql);
+			sql = "INSERT INTO s_grif_tstatus(tstatus_name)" + "values('OPEN')";
+			statement.executeUpdate(sql);
+			sql = "INSERT INTO s_grif_tstatus(tstatus_name)" + "values('RESOLVED')";
+			statement.executeUpdate(sql);
+			sql = "INSERT INTO s_grif_tstatus(tstatus_name)" + "values('CLOSED')";
+			statement.executeUpdate(sql);
+			
+			System.out.println("Ticket Status inserts completed in the Trouble Ticket database.");
+			
+			statement.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	
 	// add other desired CRUD methods needed like for updates, deletes, etc.
 	//DELETE FROM `fp411`.`s_grif_tickets` WHERE (`ticket_id` = '1');
 }
