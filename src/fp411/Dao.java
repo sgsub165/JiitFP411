@@ -42,25 +42,42 @@ public class Dao {
 		return cnct;
 	}
 
-	public void createTables() {
+	public void createTables() throws SQLException {
 		// variables for SQL Query table creations
-//		final String createTicketsTable = "CREATE TABLE s_grif_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, "
-//				+ "emp_user_id VARCHAR(20) NOT NULL, emp_dept_id VARCHAR(5) NOT NULL)";
 		
-
-		final String createTicketsTable = "CREATE TABLE s_grif_tickets(ticket_id INT AUTO_INCREMENT PRIMARY KEY, "
-				+ "ticket_status VARCHAR(10), emp_user_id VARCHAR(20) NOT NULL, dept_name VARCHAR(10) NOT NULL, "
-				+ "submit_date DATE NOT NULL, issue_description VARCHAR(512) NOT NULL, "
-				+ "issue_resolution_description VARCHAR(256) NULL, resolution_date DATE NULL)";
+		final String createTicketsTable = "CREATE TABLE s_grif_tickets " +
+				"(ticket_id INT AUTO_INCREMENT PRIMARY KEY, " +
+				"ticket_status VARCHAR(10), " +
+				"emp_user_id VARCHAR(20) NOT NULL, " +
+				"emp_full_name VARCHAR(45), " +
+				"dept_name VARCHAR(10) NOT NULL, " +
+				"submit_date DATE NOT NULL, " +
+				"issue_description VARCHAR(512) NOT NULL, " +
+				"issue_resolution_description VARCHAR(256) NULL, " +
+				"resolution_date DATE NULL)";
 		
-		final String createUsersTable = "CREATE TABLE s_grif_users(employee_id INT AUTO_INCREMENT PRIMARY KEY, "
-				+ "emp_user_id VARCHAR(20) NOT NULL, emp_passwrd VARCHAR(30) NOT NULL, "
-				+ "emp_full_name VARCHAR(45), dept_name VARCHAR(10) NOT NULL)";
+		final String createUsersTable = "CREATE TABLE s_grif_users " +
+				"(emp_user_id VARCHAR(20) NOT NULL PRIMARY KEY, " +
+				"emp_passwrd VARCHAR(30) NOT NULL, " +
+				"emp_full_name VARCHAR(45), " +
+				"dept_name VARCHAR(10) NOT NULL)";
 		
-		final String createDeptTable = "CREATE TABLE s_grif_depts(dept_id INT AUTO_INCREMENT PRIMARY KEY, "
+//		final String createUsersTable = "CREATE TABLE s_grif_users " +
+//				"(emp_id INT AUTO_INCREMENT " +
+//				"(emp_user_id VARCHAR(20) NOT NULL, " +
+//				"emp_passwrd VARCHAR(30) NOT NULL, " +
+//				"emp_full_name VARCHAR(45), " +
+//				"dept_name VARCHAR(10) NOT NULL, " +
+//				"ticket_id INT " +
+//				"PRIMARY KEY (emp_user_id), " +
+//				"FOREIGN KEY (ticket_id) REFERENCES s_grif_tickets(ticket_id))";
+		
+		final String createDeptTable = "CREATE TABLE s_grif_depts("
+				+ "dept_id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "dept_name VARCHAR(10))";
 		
-		final String createTicketStatusTable = "CREATE TABLE s_grif_tstatus(tstatus_id INT AUTO_INCREMENT PRIMARY KEY, "
+		final String createTicketStatusTable = "CREATE TABLE s_grif_tstatus("
+				+ "tstatus_id INT AUTO_INCREMENT PRIMARY KEY, "
 				+ "tstatus_name VARCHAR(10))";
 
 		try {
@@ -73,7 +90,7 @@ public class Dao {
 			stmnt.executeUpdate(createUsersTable);
 			stmnt.executeUpdate(createDeptTable);
 			stmnt.executeUpdate(createTicketStatusTable);
-			System.out.println("Created tables in Trouble Ticket database...");
+			System.out.println("Created tables in Trouble Ticket database.");
 
 			// end create table
 			// close connection/statement object
@@ -117,6 +134,8 @@ public class Dao {
 			// Setup the connection with the DB
 
 			statement = getConnection().createStatement();
+			
+			System.out.println("\tInserting Users into the User table...");
 
 			// create loop to grab each array index containing a list of values
 			// and PASS (insert) that data into your User table
@@ -145,7 +164,7 @@ public class Dao {
 			statement = getConnection().createStatement();
 			System.out.println("Successful connection to the Trouble Ticket database.");
 			
-			System.out.println("Inserting Departments into the Department table...");
+			System.out.println("\tInserting Departments into the Department table...");
 			
 			sql = "INSERT INTO s_grif_depts(dept_name)" + "VALUES('IT')";
 			statement.executeUpdate(sql);
@@ -178,8 +197,6 @@ public class Dao {
 			
 			System.out.println("Inserting Ticket Status into the Ticket Status table...");
 			
-			sql = "INSERT INTO s_grif_tstatus(tstatus_name)" + "VALUES('NEW')";
-			statement.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_tstatus(tstatus_name)" + "values('OPEN')";
 			statement.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_tstatus(tstatus_name)" + "values('RESOLVED')";

@@ -60,8 +60,12 @@ public class ticketsGUI implements ActionListener {
 		chkIfAdmin = verifyRole; 
 		JOptionPane.showMessageDialog(null, "Welcome " + verifyRole + " to the Trouble Ticket System");
 		if (chkIfAdmin.equals("Admin"))
-
-			dao.createTables(); // fire up table creations (tickets / user
+			try {
+				dao.createTables();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} // fire up table creations (tickets / user
 								// tables)
 		/*
 		 * else do something else if you like
@@ -163,13 +167,12 @@ public class ticketsGUI implements ActionListener {
 				Statement statement = Dao.getConnection().createStatement();
  
 				int result = statement
-//						.executeUpdate("Insert into s_grif_tickets(ticket_issuer, ticket_description) values(" + " '"
-//								+ ticketName + "','" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
-				
-					.executeUpdate("Insert into s_grif_tickets(emp_user_id, emp_dept_id, issue_description, submit_date) "
-							+ "values(" + " '" + submitterName + "','" + submitterDept + "','" + ticketDesc + "', now())", Statement.RETURN_GENERATED_KEYS);
-			
 
+					.executeUpdate("INSERT INTO s_grif_tickets(ticket_status, emp_user_id, dept_name, "
+							+ "issue_description, submit_date)" 
+							+ "VALUES('OPEN', '" + submitterName + "','" + submitterDept + "','" 
+							+ ticketDesc + "', now())", Statement.RETURN_GENERATED_KEYS);
+			
 				// retrieve ticket id number newly auto generated upon record insertion
 				ResultSet resultSet = null;
 				resultSet = statement.getGeneratedKeys();
@@ -196,13 +199,20 @@ public class ticketsGUI implements ActionListener {
 
 				Statement statement = Dao.getConnection().createStatement();
 
-				ResultSet results = statement.executeQuery("SELECT * FROM s_grif_tickets");
+				ResultSet results = statement.executeQuery("SELECT sgt.ticket_id, "
+						+ "sgt.ticket_status, sgt.emp_user_id, sgu.emp_full_name as NAME, "
+						+ "sgt.dept_name as 'DEPT', sgt.submit_date as 'SUBMIT DATE', "
+						+ "sgt.issue_description as 'DESCRIPTION', sgt.issue_resolution_description as 'RESOLUTION', "
+						+ "sgt.resolution_date as 'DATE FIXED' "
+						+ "FROM s_grif_tickets sgt "
+						+ "INNER JOIN s_grif_users sgu ON sgt.emp_full_name = sgu.emp_full_name");
+				
 
 				// Use JTable built in functionality to build a table model and
 				// display the table model off your result set!!!
 				JTable jt = new JTable(ticketsJTable.buildTableModel(results));
 
-				jt.setBounds(30, 40, 200, 300);
+				jt.setBounds(50, 50, 300, 300);
 				sp = new JScrollPane(jt);
 				mainFrame.add(sp);
 				mainFrame.setVisible(true); // refreshes or repaints frame on
