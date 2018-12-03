@@ -52,7 +52,7 @@ public class Login {
 
 		// instantiate objects
 
-		mainFrame = new JFrame("Login"); // title of window form
+		mainFrame = new JFrame("User Login"); // title of window form
 		headerLabel = new JLabel("", JLabel.CENTER);
 		statusLabel = new JLabel("", JLabel.CENTER);
 		controlPanel = new JPanel();
@@ -64,7 +64,7 @@ public class Login {
 		mainFrame.setLocationRelativeTo(null);
 
 		// frame object settings
-		headerLabel.setText("Account Access");
+		headerLabel.setText("Trouble Ticket DB Access");
 		statusLabel.setSize(350, 100);
 
 		// add frame objects to mainframe

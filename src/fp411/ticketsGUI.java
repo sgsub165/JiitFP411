@@ -120,7 +120,7 @@ public class ticketsGUI implements ActionListener {
 
 	private void prepareGUI() {
 		// initialize frame object
-		mainFrame = new JFrame("Tickets");
+		mainFrame = new JFrame("Trouble Tickets");
 
 		// create jmenu bar
 		JMenuBar bar = new JMenuBar();
@@ -167,13 +167,11 @@ public class ticketsGUI implements ActionListener {
 				Statement statement = Dao.getConnection().createStatement();
  
 				int result = statement
-					.executeUpdate("INSERT INTO s_grif_tickets(emp_user_id, dept_id, ticket_status_id, submit_date, issue_description) " 
-								+ "VALUES(" + " '" + submitterName + "','" + submitterDept + "', 'OPEN', now(), '" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
-
-//					.executeUpdate("INSERT INTO s_grif_tickets(ticket_status, emp_user_id, dept_id, "
-//							+ "issue_description, submit_date)" 
-//							+ "VALUES('OPEN', '" + submitterName + "','" + submitterDept + "','" 
-//							+ ticketDesc + "', now())", Statement.RETURN_GENERATED_KEYS);
+					.executeUpdate("INSERT INTO s_grif_tickets"
+							+ "(emp_user_id, dept_id, ticket_status_id, "
+							+ "submit_date, issue_description) " 
+							+ "VALUES(" + " '" + submitterName + "','" + submitterDept + "', 'OPEN', now(), "
+							+ "'" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
 			
 				// retrieve ticket id number newly auto generated upon record insertion
 				ResultSet resultSet = null;
@@ -201,18 +199,13 @@ public class ticketsGUI implements ActionListener {
 
 				Statement statement = Dao.getConnection().createStatement();
 
-				ResultSet results = statement.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, sgu.emp_full_name, sgt.dept_id, sgt.ticket_status_id, sgt.submit_date, sgt.issue_description, estimate_fix_date, sgt.issue_resolution, sgt.resolution_date FROM s_grif_tickets sgt INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id");
+				ResultSet results = statement.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, "
+						+ "sgu.emp_full_name, sgt.dept_id, sgt.ticket_status_id, sgt.submit_date, "
+						+ "sgt.issue_description, estimate_fix_date, sgt.issue_resolution, "
+						+ "sgt.resolution_date "
+						+ "FROM s_grif_tickets sgt "
+						+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id");
 						
-						
-						
-//						("SELECT sgt.ticket_id, "
-//						+ "sgt.ticket_status_id, sgt.emp_user_id, sgu.emp_full_name, "
-//						+ "sgt.dept_id, sgt.submit_date, sgt.issue_description, "
-//						+ "sgt.issue_resolution_description, sgt.resolution_date, "
-//						+ "FROM s_grif_tickets sgt"
-//						+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id");
-				
-
 				// Use JTable built in functionality to build a table model and
 				// display the table model off your result set!!!
 				JTable jt = new JTable(ticketsJTable.buildTableModel(results));

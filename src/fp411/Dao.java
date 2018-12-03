@@ -21,7 +21,8 @@ import java.util.List;
 public class Dao {
 	// instance fields
 	static Connection  cnct = null;
-	Statement stmnt = null;
+	static Statement stmnt = null;
+	static String sql = null;
 
 	// constructor
 	public Dao() {
@@ -45,23 +46,24 @@ public class Dao {
 	public void createTables() throws SQLException {
 		// variables for SQL Query table creations
 		
-		final String createTicketStatusTable = "CREATE TABLE s_grif_ticketstatus "
+		System.out.println("Creating tables in Trouble Ticket database...");
+		
+		final String createTicketStatusTable = "CREATE TABLE IF NOT EXISTS s_grif_ticketstatus "
 				+ "(ticket_status_id VARCHAR(10) NOT NULL, "
 				+ "PRIMARY KEY(ticket_status_id))";
 		
-		final String createDeptTable = "CREATE TABLE s_grif_depts "
+		final String createDeptTable = "CREATE TABLE IF NOT EXISTS s_grif_depts "
 				+ "(dept_id VARCHAR(10) NOT NULL, "
 				+ "PRIMARY KEY(dept_id))";
 		
-		final String createUsersTable = "CREATE TABLE s_grif_users "
+		final String createUsersTable = "CREATE TABLE IF NOT EXISTS s_grif_users "
 				+ "(emp_user_id VARCHAR(20) NOT NULL, " 
 				+ "emp_passwrd VARCHAR(30) NOT NULL, " 
 				+ "emp_full_name VARCHAR(45) NOT NULL, " 
 				+ "dept_id VARCHAR(10) NOT NULL, "
 				+ "PRIMARY KEY(emp_user_id))";
-//				+ "FOREIGN KEY(dept_id) REFERENCES s_grif_depts(dept_id))";
 		
-		final String createTicketsTable = "CREATE TABLE s_grif_tickets "
+		final String createTicketsTable = "CREATE TABLE IF NOT EXISTS s_grif_tickets "
 				+ "(ticket_id INT AUTO_INCREMENT, "
 				+ "emp_user_id VARCHAR(20) NOT NULL, "
 				+ "dept_id VARCHAR(10) NOT NULL, "
@@ -72,7 +74,9 @@ public class Dao {
 				+ "issue_resolution VARCHAR(256) NULL, "
 				+ "resolution_date DATE NULL, "
 				+ "PRIMARY KEY(ticket_id), "
-				+ "FOREIGN KEY(ticket_status_id) REFERENCES s_grif_ticketstatus(ticket_status_id))";
+				+ "FOREIGN KEY(ticket_status_id) REFERENCES s_grif_ticketstatus(ticket_status_id), "
+				+ "FOREIGN KEY(dept_id) REFERENCES s_grif_depts(dept_id), "
+				+ "FOREIGN KEY(emp_user_id) REFERENCES s_grif_users(emp_user_id))";
 				
 		try {
 
@@ -81,10 +85,14 @@ public class Dao {
 			stmnt = getConnection().createStatement();
 
 			stmnt.executeUpdate(createTicketStatusTable);
+			System.out.println("\tSuccessfully created Ticket Status table in Trouble Ticket database.");
 			stmnt.executeUpdate(createDeptTable);
+			System.out.println("\tSuccessfully created Department table in Trouble Ticket database.");
 			stmnt.executeUpdate(createUsersTable);
+			System.out.println("\tSuccessfully created Users table in Trouble Ticket database.");
 			stmnt.executeUpdate(createTicketsTable);
-			System.out.println("Created tables in Trouble Ticket database.");
+			System.out.println("\tSuccessfully created Tickets table in Trouble Ticket database.");
+			System.out.println("Tables have been created and ready for data insertion.");
 
 			// end create table
 			// close connection/statement object
@@ -103,9 +111,9 @@ public class Dao {
 		// add list of users from userlist.csv file to users table
 
 		// variables for SQL Query inserts
-		String sql;
+		//String sql;
 
-		Statement statement;
+		//Statement statement;
 		BufferedReader br;
 		List<List<String>> array = new ArrayList<>(); // array list to hold
 												  	  // spreadsheet rows &
@@ -127,9 +135,9 @@ public class Dao {
 
 			// Setup the connection with the DB
 
-			statement = getConnection().createStatement();
+			stmnt = getConnection().createStatement();
 			
-			System.out.println("\tInserting Users into the User table...");
+			System.out.println("\nInserting Users into the User table...");
 
 			// create loop to grab each array index containing a list of values
 			// and PASS (insert) that data into your User table
@@ -141,12 +149,12 @@ public class Dao {
 						+ "','" + rowData.get(2) 
 						+ "','" + rowData.get(3) 
 						+ "');";
-				statement.executeUpdate(sql);
+				stmnt.executeUpdate(sql);
 			}
-			System.out.println("User inserts completed in the Trouble Ticket database.");
+			System.out.println("\tUser inserts completed in the Trouble Ticket database.");
 
 			// close statement object
-			statement.close();
+			stmnt.close();
  
 		} catch (Exception e) {
 			System.out.println( e.getMessage());
@@ -154,28 +162,27 @@ public class Dao {
 	}
 	
 	public void addDepts() {
-		String sql;
-		Statement statement;
+//		String sql;
+//		Statement statement;
 		//set up the DB connection
 		
 		try {
-			statement = getConnection().createStatement();
-			System.out.println("Successful connection to the Trouble Ticket database.");
+			stmnt = getConnection().createStatement();
 			
-			System.out.println("\tInserting Departments into the Department table...");
+			System.out.println("\nInserting Department values into the Department table...");
 			
 			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('IT')";
-			statement.executeUpdate(sql);
+			stmnt.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('DEV')";
-			statement.executeUpdate(sql);
+			stmnt.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('TACS')";
-			statement.executeUpdate(sql);
+			stmnt.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('TEST')";
-			statement.executeUpdate(sql);
+			stmnt.executeUpdate(sql);
 			
-			System.out.println("Department inserts completed in the Trouble Ticket database.");
+			System.out.println("\tDepartment inserts completed in the Trouble Ticket database.");
 			
-			statement.close();
+			stmnt.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -185,26 +192,25 @@ public class Dao {
 	}
 	
 	public void addTicketStatus() {
-		String sql;
-		Statement statement;
+//		String sql;
+//		Statement statement;
 		//set up the DB connection
 		
 		try {
-			statement = getConnection().createStatement();
-			System.out.println("Successful connection to the Trouble Ticket database.");
+			stmnt = getConnection().createStatement();
 			
-			System.out.println("Inserting Ticket Status into the Ticket Status table...");
+			System.out.println("\nInserting Ticket Status values into the Ticket Status table...");
 			
 			sql = "INSERT INTO s_grif_ticketstatus(ticket_status_id)" + "VALUES('OPEN')";
-			statement.executeUpdate(sql);
+			stmnt.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_ticketstatus(ticket_status_id)" + "VALUES('RESOLVED')";
-			statement.executeUpdate(sql);
+			stmnt.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_ticketstatus(ticket_status_id)" + "VALUES('CLOSED')";
-			statement.executeUpdate(sql);
+			stmnt.executeUpdate(sql);
 			
-			System.out.println("Ticket Status inserts completed in the Trouble Ticket database.");
+			System.out.println("\tTicket Status inserts completed in the Trouble Ticket database.");
 			
-			statement.close();
+			stmnt.close();
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
