@@ -167,11 +167,13 @@ public class ticketsGUI implements ActionListener {
 				Statement statement = Dao.getConnection().createStatement();
  
 				int result = statement
+					.executeUpdate("INSERT INTO s_grif_tickets(emp_user_id, dept_id, ticket_status_id, submit_date, issue_description) " 
+								+ "VALUES(" + " '" + submitterName + "','" + submitterDept + "', 'OPEN', now(), '" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
 
-					.executeUpdate("INSERT INTO s_grif_tickets(ticket_status, emp_user_id, dept_name, "
-							+ "issue_description, submit_date)" 
-							+ "VALUES('OPEN', '" + submitterName + "','" + submitterDept + "','" 
-							+ ticketDesc + "', now())", Statement.RETURN_GENERATED_KEYS);
+//					.executeUpdate("INSERT INTO s_grif_tickets(ticket_status, emp_user_id, dept_id, "
+//							+ "issue_description, submit_date)" 
+//							+ "VALUES('OPEN', '" + submitterName + "','" + submitterDept + "','" 
+//							+ ticketDesc + "', now())", Statement.RETURN_GENERATED_KEYS);
 			
 				// retrieve ticket id number newly auto generated upon record insertion
 				ResultSet resultSet = null;
@@ -199,13 +201,16 @@ public class ticketsGUI implements ActionListener {
 
 				Statement statement = Dao.getConnection().createStatement();
 
-				ResultSet results = statement.executeQuery("SELECT sgt.ticket_id, "
-						+ "sgt.ticket_status, sgt.emp_user_id, sgu.emp_full_name as NAME, "
-						+ "sgt.dept_name as 'DEPT', sgt.submit_date as 'SUBMIT DATE', "
-						+ "sgt.issue_description as 'DESCRIPTION', sgt.issue_resolution_description as 'RESOLUTION', "
-						+ "sgt.resolution_date as 'DATE FIXED' "
-						+ "FROM s_grif_tickets sgt "
-						+ "INNER JOIN s_grif_users sgu ON sgt.emp_full_name = sgu.emp_full_name");
+				ResultSet results = statement.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, sgu.emp_full_name, sgt.dept_id, sgt.ticket_status_id, sgt.submit_date, sgt.issue_description, estimate_fix_date, sgt.issue_resolution, sgt.resolution_date FROM s_grif_tickets sgt INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id");
+						
+						
+						
+//						("SELECT sgt.ticket_id, "
+//						+ "sgt.ticket_status_id, sgt.emp_user_id, sgu.emp_full_name, "
+//						+ "sgt.dept_id, sgt.submit_date, sgt.issue_description, "
+//						+ "sgt.issue_resolution_description, sgt.resolution_date, "
+//						+ "FROM s_grif_tickets sgt"
+//						+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id");
 				
 
 				// Use JTable built in functionality to build a table model and
