@@ -12,17 +12,21 @@ import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 public class Dao {
 	// instance fields
 	static Connection  cnct = null;
 	static Statement stmnt = null;
 	static String sql = null;
+//	private Statement rstatement;
 
 	// constructor
 	public Dao() {
@@ -218,7 +222,61 @@ public class Dao {
 		}
 		
 	}
+	
+	public void createTicket() {
 
+		try {
+
+			// get ticket information
+			String submitterName = JOptionPane.showInputDialog(null, "Enter your Employee User ID");
+			String submitterDept = JOptionPane.showInputDialog(null, "Enter your Department ID");
+			String ticketDesc = JOptionPane.showInputDialog(null, "Enter a ticket description");
+
+			// insert ticket information to database
+
+			Statement statement = Dao.getConnection().createStatement();
+			
+			//dao.
+
+			int result = statement
+				.executeUpdate("INSERT INTO s_grif_tickets"
+						+ "(emp_user_id, dept_id, ticket_status_id, "
+						+ "submit_date, issue_description) " 
+						+ "VALUES(" + " '" + submitterName + "','" + submitterDept + "', 'OPEN', now(), "
+						+ "'" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
+		
+			// retrieve ticket id number newly auto generated upon record insertion
+			ResultSet resultSet = null;
+			resultSet = statement.getGeneratedKeys();
+			int id = 0;
+			if (resultSet.next()) {
+				id = resultSet.getInt(1); // retrieve first field in table
+			}
+			// display results if successful or not to console / dialog box
+			if (result != 0) {
+				System.out.println("Ticket ID : " + id + " created successfully!!!");
+				JOptionPane.showMessageDialog(null, "Ticket id: " + id + " created");
+			} else {
+				System.out.println("Ticket cannot be created!!!");
+			}
+
+		} catch (SQLException ex) {
+				ex.printStackTrace();
+		}
+
+	}
+	
+	public void updateTicketResolved() {
+		
+	}
+	
+	public void updateTicketClosed() {
+		
+	}
+
+	public void deleteTicket() {
+		
+	}
 	
 	// add other desired CRUD methods needed like for updates, deletes, etc.
 	//DELETE FROM `fp411`.`s_grif_tickets` WHERE (`ticket_id` = '1');
