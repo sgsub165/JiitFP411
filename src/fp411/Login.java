@@ -113,30 +113,21 @@ public class Login {
 					
 						if (adminTasks.equalsIgnoreCase("C")) {
 							new ticketsGUI("Admin"); // establish role as admin via constructor call
-//							adminFlag = false;
-//							System.out.printf("1\n",adminFlag);
+
 						}
 
 						else if
 						(adminTasks.equalsIgnoreCase("T")) { 				// open up ticketsGUI file upon successful login
-//						System.out.println("gogo");
 						adminFlag = false;
-//						System.out.printf("2\n",adminFlag);
 						}
 						
 						else if
 							(!adminTasks.equalsIgnoreCase("C")) {
 							JOptionPane.showMessageDialog(null, "Invalid Input Response");
-//							System.out.println("hoho");
-//						System.out.printf("3\n",adminFlag);
 						}
 						
 						else 
-						// close of Login window
-//						System.out.println("nono");
-//						System.out.printf("4\n",adminFlag);
-						
-
+						// close Login window
 						mainFrame.dispose();
 						
 				}
@@ -151,12 +142,14 @@ public class Login {
 				    String selectStatement = "SELECT emp_user_id, emp_passwrd FROM s_grif_users where emp_user_id=? and emp_passwrd=?";
 					PreparedStatement prepstmnt;
 					ResultSet results = null;
+					
 					try {
 						// set up prepared statements to execute query string cleanly and safely
 						prepstmnt = (PreparedStatement) connect.prepareStatement(selectStatement);
 						prepstmnt.setString(1, userId);
 						prepstmnt.setString(2, password);
 						results = prepstmnt.executeQuery();
+						
 						if (results.next()) {   // verify if a record match exists
 							JOptionPane.showMessageDialog(null, "User Credentials have been verified accurate");
 							// close of Login window
@@ -168,8 +161,10 @@ public class Login {
 						} else {
 							JOptionPane.showMessageDialog(null, "Invalid Credentials\nPlease check Username and Password ");
 						}
+						
 					} catch (SQLException e1) {
 						e1.printStackTrace();
+						
 					} finally {
 						try {
 							results.close();

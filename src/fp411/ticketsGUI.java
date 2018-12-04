@@ -183,10 +183,10 @@ public class ticketsGUI implements ActionListener {
 			
 			typeUpdate = JOptionPane.showInputDialog(null, "Do you want to (R)esolve or (C)lose a ticket");
 			
-				if (typeUpdate.equals("R"))
+				if (typeUpdate.equalsIgnoreCase("R"))
 					dao.updateTicketResolved();
 				else if
-					(typeUpdate.equals("C"))
+					(typeUpdate.equalsIgnoreCase("C"))
 					dao.updateTicketClosed();
 				else
 					JOptionPane.showMessageDialog(null, "Invalid Update Selection");
