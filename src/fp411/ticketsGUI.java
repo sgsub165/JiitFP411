@@ -159,7 +159,8 @@ public class ticketsGUI implements ActionListener {
 						+ "sgt.issue_description, estimate_fix_date, sgt.issue_resolution, "
 						+ "sgt.resolution_date, sgt.closed_description, sgt.closed_date "
 						+ "FROM s_grif_tickets sgt "
-						+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id");
+						+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id "
+						+ "ORDER BY sgt.ticket_id");
 						
 				// Use JTable built in functionality to build a table model and
 				// display the table model off your result set!!!

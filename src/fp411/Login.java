@@ -92,14 +92,15 @@ public class Login {
 		loginButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				
+				String adminTasks = null;
 
 				/*
 				 * Check credentials for various users
 				 * 
 				 * Administrator is a super user to the ticket system 
 				 * Code below uses a default (temporary) hard coded admin user
-				 * name/password for verification. You can change this setting
-				 * if you like.
+				 * name/password for verification.
 				 */
 				// Create user friendly variable name to store user name from text box
 				String userId = userText.getText();
@@ -108,16 +109,43 @@ public class Login {
 				boolean adminFlag = false;
 				if (userId.equals("admin") && password.equals("admin1")) {
 					adminFlag = true;
-					// close of Login window
-					mainFrame.dispose();
-					// open up ticketsGUI file upon successful login
-					new ticketsGUI("Admin"); // establish role as admin via constructor call
+					adminTasks = JOptionPane.showInputDialog(null, "Do you want to (C)reate tables or (T)ickets?");
+					
+						if (adminTasks.equalsIgnoreCase("C")) {
+							new ticketsGUI("Admin"); // establish role as admin via constructor call
+//							adminFlag = false;
+//							System.out.printf("1\n",adminFlag);
+						}
+
+						else if
+						(adminTasks.equalsIgnoreCase("T")) { 				// open up ticketsGUI file upon successful login
+//						System.out.println("gogo");
+						adminFlag = false;
+//						System.out.printf("2\n",adminFlag);
+						}
+						
+						else if
+							(!adminTasks.equalsIgnoreCase("C")) {
+							JOptionPane.showMessageDialog(null, "Invalid Input Response");
+//							System.out.println("hoho");
+//						System.out.printf("3\n",adminFlag);
+						}
+						
+						else 
+						// close of Login window
+//						System.out.println("nono");
+//						System.out.printf("4\n",adminFlag);
+						
+
+						mainFrame.dispose();
+						
 				}
+
 				/*
 				 * match credentials from text fields with users table for a
 				 * match for regular users
 				 */
-				else if (!adminFlag) {
+					if (!adminFlag) {
 				
 					Connection connect = Dao.getConnection();
 				    String selectStatement = "SELECT emp_user_id, emp_passwrd FROM s_grif_users where emp_user_id=? and emp_passwrd=?";
@@ -130,7 +158,7 @@ public class Login {
 						prepstmnt.setString(2, password);
 						results = prepstmnt.executeQuery();
 						if (results.next()) {   // verify if a record match exists
-							JOptionPane.showMessageDialog(null, "Username and Password exists");
+							JOptionPane.showMessageDialog(null, "User Credentials have been verified accurate");
 							// close of Login window
 							mainFrame.dispose();
 							// open up ticketsGUI file upon successful login
@@ -138,7 +166,7 @@ public class Login {
 														// regular user via
 														// constructor call
 						} else {
-							JOptionPane.showMessageDialog(null, "Please check Username and Password ");
+							JOptionPane.showMessageDialog(null, "Invalid Credentials\nPlease check Username and Password ");
 						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();
