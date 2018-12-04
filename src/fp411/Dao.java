@@ -223,8 +223,7 @@ public class Dao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 	
 	public void createTicket() {
@@ -267,7 +266,6 @@ public class Dao {
 		} catch (SQLException ex) {
 				ex.printStackTrace();
 		}
-
 	}
 	
 	public void readTicket() {
@@ -297,20 +295,18 @@ public class Dao {
 		} catch (SQLException e) {
 
 			System.out.println(e.getMessage());
-
-		} 
-		
+		} 		
 	}
-
 	
 	public void updateTicketClosed() {
 		
 		try {
 			
 		String closedTicketID = JOptionPane.showInputDialog(null, "Enter Ticket ID to close");
-		String closedDescription = JOptionPane.showInputDialog(null, "Enter a description of the resolution");
+		String closedDescription = JOptionPane.showInputDialog(null, "Enter a verfication description for close");
 
-		String updateTableSQL = "UPDATE s_grif_tickets SET ticket_status_id = 'CLOSED', closed_description = ?, closed_date = now() WHERE ticket_id = ?";
+		String updateTableSQL = "UPDATE s_grif_tickets SET ticket_status_id = 'CLOSED', "
+				+ "closed_description = ?, closed_date = now() WHERE ticket_id = ?";
 
 		stmnt = getConnection().createStatement();
 		prepedStmnt = cnct.prepareStatement(updateTableSQL);
@@ -327,15 +323,31 @@ public class Dao {
 		} catch (SQLException e) {
 
 			System.out.println(e.getMessage());
-
-		} 
-		
+		} 		
 	}
 
-	public void deleteTicket() {
+	public void deleteTicket() {	
 		
+		try {
+			
+		String deletedTicketID = JOptionPane.showInputDialog(null, "Enter Ticket ID to delete");
+
+		String updateTableSQL = "DELETE FROM s_grif_tickets WHERE ticket_id = ?";
+
+		stmnt = getConnection().createStatement();
+		prepedStmnt = cnct.prepareStatement(updateTableSQL);
+		prepedStmnt.setInt(1, Integer.parseInt(deletedTicketID));
+
+			// execute update SQL statement
+		prepedStmnt.executeUpdate();
+
+			System.out.println("Trouble Ticket has been Deleted");
+			
+			stmnt.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+		} 		
 	}
-	
-	// add other desired CRUD methods needed like for updates, deletes, etc.
-	//DELETE FROM `fp411`.`s_grif_tickets` WHERE (`ticket_id` = '1');
 }

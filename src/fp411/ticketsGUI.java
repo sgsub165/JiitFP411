@@ -188,7 +188,10 @@ public class ticketsGUI implements ActionListener {
 					(typeUpdate.equals("C"))
 					dao.updateTicketClosed();
 				else
-					JOptionPane.showMessageDialog(null, "Invalid Update selection");
+					JOptionPane.showMessageDialog(null, "Invalid Update Selection");
+				
+		} else if (e.getSource() == mnuItemDelete) {
+			dao.deleteTicket();
 		}
 	} 
 }
