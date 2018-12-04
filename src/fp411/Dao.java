@@ -233,7 +233,7 @@ public class Dao {
 			String submitterName = JOptionPane.showInputDialog(null, "Enter your Employee User ID");
 			String submitterDept = JOptionPane.showInputDialog(null, "Enter your Department ID");
 			String ticketDesc = JOptionPane.showInputDialog(null, "Enter a ticket description");
-			String estimate_fix_date = JOptionPane.showInputDialog(null, "Enter a date the ticket must be resolved");
+			String estimate_fix_date = JOptionPane.showInputDialog(null, "Enter a date the ticket must be resolved (ex. 2018-2-4)");
 
 			// insert ticket information to database
 
