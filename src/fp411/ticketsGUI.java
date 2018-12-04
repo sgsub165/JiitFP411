@@ -157,7 +157,7 @@ public class ticketsGUI implements ActionListener {
 				ResultSet results = statement.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, "
 						+ "sgu.emp_full_name, sgt.dept_id, sgt.ticket_status_id, sgt.submit_date, "
 						+ "sgt.issue_description, estimate_fix_date, sgt.issue_resolution, "
-						+ "sgt.resolution_date "
+						+ "sgt.resolution_date, sgt.closed_description, sgt.closed_date "
 						+ "FROM s_grif_tickets sgt "
 						+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id");
 						
@@ -177,7 +177,18 @@ public class ticketsGUI implements ActionListener {
 			}
 
 		} else if (e.getSource() == mnuItemUpdate)  {
-			dao.updateTicketResolved();
+			
+			String typeUpdate = null;
+			
+			typeUpdate = JOptionPane.showInputDialog(null, "Do you want to (R)esolve or (C)lose a ticket");
+			
+				if (typeUpdate.equals("R"))
+					dao.updateTicketResolved();
+				else if
+					(typeUpdate.equals("C"))
+					dao.updateTicketClosed();
+				else
+					JOptionPane.showMessageDialog(null, "Invalid Update selection");
 		}
 	} 
 }

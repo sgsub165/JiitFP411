@@ -79,11 +79,13 @@ public class Dao {
 				+ "emp_user_id VARCHAR(20) NOT NULL, "
 				+ "dept_id VARCHAR(10) NOT NULL, "
 				+ "ticket_status_id VARCHAR(10) NOT NULL, "
-				+ "submit_date DATE NOT NULL, "
+				+ "submit_date DATETIME NOT NULL, "
 				+ "issue_description VARCHAR(512) NOT NULL, "
 				+ "estimate_fix_date DATE NULL, "
 				+ "issue_resolution VARCHAR(256) NULL, "
-				+ "resolution_date DATE NULL, "
+				+ "resolution_date DATETIME NULL, "
+				+ "closed_description VARCHAR(256) NULL, "
+				+ "closed_date DATETIME NULL, "
 				+ "PRIMARY KEY(ticket_id), "
 				+ "FOREIGN KEY(ticket_status_id) REFERENCES s_grif_ticketstatus(ticket_status_id), "
 				+ "FOREIGN KEY(dept_id) REFERENCES s_grif_depts(dept_id), "
@@ -286,7 +288,7 @@ public class Dao {
 			// execute update SQL statement
 		prepedStmnt.executeUpdate();
 
-			System.out.println("Record is updated to DBUSER table!");
+			System.out.println("Trouble Ticket has been updated to Resolved");
 			
 			stmnt.close();
 
@@ -300,6 +302,31 @@ public class Dao {
 
 	
 	public void updateTicketClosed() {
+		
+		try {
+			
+		String closedTicketID = JOptionPane.showInputDialog(null, "Enter Ticket ID to close");
+		String closedDescription = JOptionPane.showInputDialog(null, "Enter a description of the resolution");
+
+		String updateTableSQL = "UPDATE s_grif_tickets SET ticket_status_id = 'CLOSED', closed_description = ?, closed_date = now() WHERE ticket_id = ?";
+
+		stmnt = getConnection().createStatement();
+		prepedStmnt = cnct.prepareStatement(updateTableSQL);
+		prepedStmnt.setString(1, closedDescription);
+		prepedStmnt.setInt(2, Integer.parseInt(closedTicketID));
+
+			// execute update SQL statement
+		prepedStmnt.executeUpdate();
+
+			System.out.println("Trouble Ticket has been updated to Closed");
+			
+			stmnt.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} 
 		
 	}
 
