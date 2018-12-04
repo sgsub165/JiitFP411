@@ -187,6 +187,8 @@ public class Dao {
 			stmnt.executeUpdate(sql);
 			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('TEST')";
 			stmnt.executeUpdate(sql);
+			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('HR')";
+			stmnt.executeUpdate(sql);
 			
 			System.out.println("\tDepartment inserts completed in the Trouble Ticket database.");
 			
