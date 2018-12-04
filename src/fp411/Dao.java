@@ -12,21 +12,28 @@ import java.io.File;
 import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+//import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+//import java.util.Date;
 import java.util.List;
 
+//import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+//import javax.swing.JScrollPane;
+//import javax.swing.JTable;
+//import javax.swing.JTable;
 
 public class Dao {
 	// instance fields
 	static Connection  cnct = null;
 	static Statement stmnt = null;
 	static String sql = null;
-//	private Statement rstatement;
+	static PreparedStatement prepedStmnt = null;
 
 	// constructor
 	public Dao() {
@@ -101,7 +108,7 @@ public class Dao {
 			// end create table
 			// close connection/statement object
 			stmnt.close();
-			cnct.close();
+//			cnct.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -114,10 +121,6 @@ public class Dao {
 	public void addUsers() {
 		// add list of users from userlist.csv file to users table
 
-		// variables for SQL Query inserts
-		//String sql;
-
-		//Statement statement;
 		BufferedReader br;
 		List<List<String>> array = new ArrayList<>(); // array list to hold
 												  	  // spreadsheet rows &
@@ -166,8 +169,7 @@ public class Dao {
 	}
 	
 	public void addDepts() {
-//		String sql;
-//		Statement statement;
+		
 		//set up the DB connection
 		
 		try {
@@ -191,13 +193,11 @@ public class Dao {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 	
 	public void addTicketStatus() {
-//		String sql;
-//		Statement statement;
+
 		//set up the DB connection
 		
 		try {
@@ -224,30 +224,29 @@ public class Dao {
 	}
 	
 	public void createTicket() {
-
+		
 		try {
 
 			// get ticket information
 			String submitterName = JOptionPane.showInputDialog(null, "Enter your Employee User ID");
 			String submitterDept = JOptionPane.showInputDialog(null, "Enter your Department ID");
 			String ticketDesc = JOptionPane.showInputDialog(null, "Enter a ticket description");
+			String estimate_fix_date = JOptionPane.showInputDialog(null, "Enter a date the ticket must be resolved");
 
 			// insert ticket information to database
 
-			Statement statement = Dao.getConnection().createStatement();
-			
-			//dao.
+			stmnt = getConnection().createStatement();
 
-			int result = statement
+			int result = stmnt
 				.executeUpdate("INSERT INTO s_grif_tickets"
 						+ "(emp_user_id, dept_id, ticket_status_id, "
-						+ "submit_date, issue_description) " 
+						+ "submit_date, issue_description, estimate_fix_date) " 
 						+ "VALUES(" + " '" + submitterName + "','" + submitterDept + "', 'OPEN', now(), "
-						+ "'" + ticketDesc + "')", Statement.RETURN_GENERATED_KEYS);
+						+ "'" + ticketDesc + "','" + estimate_fix_date + "')", Statement.RETURN_GENERATED_KEYS);
 		
 			// retrieve ticket id number newly auto generated upon record insertion
 			ResultSet resultSet = null;
-			resultSet = statement.getGeneratedKeys();
+			resultSet = stmnt.getGeneratedKeys();
 			int id = 0;
 			if (resultSet.next()) {
 				id = resultSet.getInt(1); // retrieve first field in table
@@ -259,6 +258,7 @@ public class Dao {
 			} else {
 				System.out.println("Ticket cannot be created!!!");
 			}
+			stmnt.close();
 
 		} catch (SQLException ex) {
 				ex.printStackTrace();
@@ -266,9 +266,38 @@ public class Dao {
 
 	}
 	
-	public void updateTicketResolved() {
+	public void readTicket() {
 		
 	}
+	public void updateTicketResolved() {
+
+		try {
+		
+		String resolvedTicketID = JOptionPane.showInputDialog(null, "Enter Ticket ID for Resolution");
+		String resolutionDescription = JOptionPane.showInputDialog(null, "Enter a description of the resolution");
+
+		String updateTableSQL = "UPDATE s_grif_tickets SET ticket_status_id = 'RESOLVED', issue_resolution = ?, resolution_date = now() WHERE ticket_id = ?";
+
+		stmnt = getConnection().createStatement();
+		prepedStmnt = cnct.prepareStatement(updateTableSQL);
+		prepedStmnt.setString(1, resolutionDescription);
+		prepedStmnt.setInt(2, Integer.parseInt(resolvedTicketID));
+
+			// execute update SQL statement
+		prepedStmnt.executeUpdate();
+
+			System.out.println("Record is updated to DBUSER table!");
+			
+			stmnt.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} 
+		
+	}
+
 	
 	public void updateTicketClosed() {
 		

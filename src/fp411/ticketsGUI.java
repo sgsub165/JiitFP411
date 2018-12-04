@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-//import java.sql.Connection;
-//import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -25,8 +23,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-
-import fp411.ticketsJTable;
 
 public class ticketsGUI implements ActionListener {
 
@@ -67,11 +63,6 @@ public class ticketsGUI implements ActionListener {
 				e.printStackTrace();
 			} // fire up table creations (tickets / user
 								// tables)
-		/*
-		 * else do something else if you like
-		 *
-		 */
-
 		createMenu();
 		prepareGUI();
 	}
@@ -114,8 +105,6 @@ public class ticketsGUI implements ActionListener {
 		mnuItemOpenTicket.addActionListener(this);
 		mnuItemViewTicket.addActionListener(this);
 
-		// add any more listeners for any additional sub menu items if desired
-
 	}
 
 	private void prepareGUI() {
@@ -137,7 +126,7 @@ public class ticketsGUI implements ActionListener {
 			}
 		});
 		// set frame options
-		mainFrame.setSize(800, 400);
+		mainFrame.setSize(1400, 400);
 		mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
@@ -186,10 +175,9 @@ public class ticketsGUI implements ActionListener {
 			} catch (SQLException e1) {
 					e1.printStackTrace();
 			}
-		}   /*
-			 * continue implementing any other desired sub menu items (like for
-			 * update and delete sub menus for example) with similar syntax &
-			 * logic as shown above*
-			 */
-	}
+
+		} else if (e.getSource() == mnuItemUpdate)  {
+			dao.updateTicketResolved();
+		}
+	} 
 }
