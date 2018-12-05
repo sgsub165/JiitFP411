@@ -29,10 +29,14 @@ import javax.swing.JTextField;
 import java.sql.PreparedStatement;
 
 import fp411.ticketsGUI;
-
+/**
+ * The purpose of this class is to provide the tools to create
+ * the login frame and allow the user to login with 
+ * credential authentication.
+ */
 public class Login {
 
-	// create instance fields for class
+	//create instance fields for class
 	private JFrame mainFrame;
 	private JLabel headerLabel;
 	private JLabel statusLabel;
@@ -43,46 +47,48 @@ public class Login {
 	private JButton loginButton;
 	private JPanel controlPanel;
 
+	//class constructor method to call methods to initiate GUI
 	public Login() {
 		prepareGUI();
 		showTextFields();
 	}
-
+	//method to create the GUI elements
 	private void prepareGUI() {
 
-		// instantiate objects
-
+		//instantiate jframe and jpanel objects
 		mainFrame = new JFrame("User Login"); // title of window form
 		headerLabel = new JLabel("", JLabel.CENTER);
 		statusLabel = new JLabel("", JLabel.CENTER);
 		controlPanel = new JPanel();
 
-		// window frame settings
+		//window frame settings
 		mainFrame.setSize(400, 400);
 		mainFrame.setLayout(new GridLayout(3, 1));
 		mainFrame.getContentPane().setBackground(Color.yellow);
 		mainFrame.setLocationRelativeTo(null);
 
-		// frame object settings
+		//frame object settings
 		headerLabel.setText("Trouble Ticket DB Access");
 		statusLabel.setSize(350, 100);
 
-		// add frame objects to mainframe
+		//add frame objects to mainframe
 		mainFrame.add(headerLabel);
 		mainFrame.add(controlPanel);
 		mainFrame.add(statusLabel);
 
 		mainFrame.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent wE) { // define a window close
-														// operation
+			
+			//define method to close the login frame window
+			public void windowClosing(WindowEvent wE) {
 				System.exit(0);
 			}
-		});
+		});		//end of add window listener
 	}
 
+	//method to present the GUI elements
 	private void showTextFields() {
 
-		// instantiate controls
+		//instantiate controls
 		uidLabel = new JLabel("User ID: ", JLabel.RIGHT);
 		pwdLabel = new JLabel("Password: ", JLabel.CENTER);
 		userText = new JTextField(6);
@@ -98,7 +104,7 @@ public class Login {
 				/*
 				 * Check credentials for various users
 				 * 
-				 * Administrator is a super user to the ticket system 
+				 * Administrator is a super user to the trouble ticket system 
 				 * Code below uses a default (temporary) hard coded admin user
 				 * name/password for verification.
 				 */
@@ -106,24 +112,24 @@ public class Login {
 				String userId = userText.getText();
 				// convert characters from password field to string for input validation
 				String password = new String(pwdText.getPassword());
-				boolean adminFlag = false;
+				boolean adminFlag = false;		//initialize admin flag
 				if (userId.equals("admin") && password.equals("admin1")) {
 					adminFlag = true;
+					//ask the admin user if they want to create tables to init the DB or simply create tickets in the established DB
 					adminTasks = JOptionPane.showInputDialog(null, "Do you want to (C)reate tables or (T)ickets?");
 					
-						if (adminTasks.equalsIgnoreCase("C")) {
-							mainFrame.dispose();
-							new ticketsGUI("Admin"); // establish role as admin via constructor call
-
-						}
+						if (adminTasks.equalsIgnoreCase("C")) {	//decision branch to create tables
+							mainFrame.dispose();		//close frame
+							new ticketsGUI("Admin"); 	// open up ticketsGUI file upon successful login
+						}								// establish role as admin via constructor call
 
 						else if
-						(adminTasks.equalsIgnoreCase("T")) { 				// open up ticketsGUI file upon successful login
-						adminFlag = false;
+						(adminTasks.equalsIgnoreCase("T")) { 	//decision branch to create tickets in DB
+						adminFlag = false;						//set admin flag false to go create tickets
 						}
 						
 						else if
-							(!adminTasks.equalsIgnoreCase("C")) {
+							(!adminTasks.equalsIgnoreCase("C")) {	//check for invalid input tell user if true
 							JOptionPane.showMessageDialog(null, "Invalid Input Response");
 						}
 						
@@ -135,30 +141,30 @@ public class Login {
 
 				/*
 				 * match credentials from text fields with users table for a
-				 * match for regular users
+				 * match for users
 				 */
 					if (!adminFlag) {
 				
-					Connection connect = Dao.getConnection();
+					Connection connect = Dao.getConnection();		//connect to DB
+					//sql select statement to check for user/pswd match
 				    String selectStatement = "SELECT emp_user_id, emp_passwrd FROM s_grif_users where emp_user_id=? and emp_passwrd=?";
 					PreparedStatement prepstmnt;
 					ResultSet results = null;
 					
 					try {
-						// set up prepared statements to execute query string cleanly and safely
+						//set up prepared statements to execute query string
 						prepstmnt = (PreparedStatement) connect.prepareStatement(selectStatement);
 						prepstmnt.setString(1, userId);
 						prepstmnt.setString(2, password);
 						results = prepstmnt.executeQuery();
 						
-						if (results.next()) {   // verify if a record match exists
+						if (results.next()) {   //verify if a record match exists
 							JOptionPane.showMessageDialog(null, "User Credentials have been verified accurate");
-							// close of Login window
+							//close of Login window
 							mainFrame.dispose();
-							// open up ticketsGUI file upon successful login
-							new ticketsGUI(userId);   // establish role as
-														// regular user via
-														// constructor call
+							//open up ticketsGUI file upon successful login
+							new ticketsGUI(userId);   //establish role as user
+														//constructor call
 						} else {
 							JOptionPane.showMessageDialog(null, "Invalid Credentials\nPlease check Username and Password ");
 						}
