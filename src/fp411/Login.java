@@ -112,6 +112,7 @@ public class Login {
 					adminTasks = JOptionPane.showInputDialog(null, "Do you want to (C)reate tables or (T)ickets?");
 					
 						if (adminTasks.equalsIgnoreCase("C")) {
+							mainFrame.dispose();
 							new ticketsGUI("Admin"); // establish role as admin via constructor call
 
 						}

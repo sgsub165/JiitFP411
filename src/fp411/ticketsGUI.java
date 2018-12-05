@@ -24,29 +24,31 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+/**
+ * the purpose of this class to provide methods to create the GUI
+ *
+ */
 public class ticketsGUI implements ActionListener {
 
 	// class level member objects
 
-	Dao dao = new Dao(); // for CRUD operations
+	Dao dao = new Dao(); // object creation for CRUD operations
 	String chkIfAdmin = null;
 	private JFrame mainFrame;
 
 	JScrollPane sp = null;
 
 	// Main menu object items
-	private JMenu mnuFile = new JMenu("File");
-	private JMenu mnuAdmin = new JMenu("Admin");
-	private JMenu mnuTickets = new JMenu("Tickets");
-
-	/* add any more Main menu object items below */
+	private JMenu menuFile = new JMenu("File");
+	private JMenu menuAdmin = new JMenu("Admin");
+	private JMenu menuTickets = new JMenu("Tickets");
 
 	// Sub menu item objects for all Main menu item objects
-	JMenuItem mnuItemExit;
-	JMenuItem mnuItemUpdate;
-	JMenuItem mnuItemDelete;
-	JMenuItem mnuItemOpenTicket;
-	JMenuItem mnuItemViewTicket;
+	JMenuItem menuElementExit;
+	JMenuItem menuElementUpdate;
+	JMenuItem menuElementDelete;
+	JMenuItem menuElementOpenTicket;
+	JMenuItem menuElementViewTicket;
 
 	/* add any more Sub object items below */
 
@@ -72,38 +74,38 @@ public class ticketsGUI implements ActionListener {
 		/* Initialize sub menu items **************************************/
 
 		// initialize sub menu item for File main menu
-		mnuItemExit = new JMenuItem("Exit");
+		menuElementExit = new JMenuItem("Exit");
 		// add to File main menu item
-		mnuFile.add(mnuItemExit);
+		menuFile.add(menuElementExit);
 
 		// initialize first sub menu items for Admin main menu
-		mnuItemUpdate = new JMenuItem("Update Ticket");
+		menuElementUpdate = new JMenuItem("Update Ticket");
 		// add to Admin main menu item
-		mnuAdmin.add(mnuItemUpdate);
+		menuAdmin.add(menuElementUpdate);
 
 		// initialize second sub menu items for Admin main menu
-		mnuItemDelete = new JMenuItem("Delete Ticket");
+		menuElementDelete = new JMenuItem("Delete Ticket");
 		// add to Admin main menu item
-		mnuAdmin.add(mnuItemDelete);
+		menuAdmin.add(menuElementDelete);
 
 		// initialize first sub menu item for Tickets main menu
-		mnuItemOpenTicket = new JMenuItem("Open Ticket");
+		menuElementOpenTicket = new JMenuItem("Open Ticket");
 		// add to Ticket Main menu item
-		mnuTickets.add(mnuItemOpenTicket);
+		menuTickets.add(menuElementOpenTicket);
 
 		// initialize second sub menu item for Tickets main menu
-		mnuItemViewTicket = new JMenuItem("View Ticket");
+		menuElementViewTicket = new JMenuItem("View Ticket");
 		// add to Ticket Main menu item
-		mnuTickets.add(mnuItemViewTicket);
+		menuTickets.add(menuElementViewTicket);
 
 		// initialize any more desired sub menu items below
 
 		/* Add action listeners for each desired menu item *************/
-		mnuItemExit.addActionListener(this);
-		mnuItemUpdate.addActionListener(this);
-		mnuItemDelete.addActionListener(this);
-		mnuItemOpenTicket.addActionListener(this);
-		mnuItemViewTicket.addActionListener(this);
+		menuElementExit.addActionListener(this);
+		menuElementUpdate.addActionListener(this);
+		menuElementDelete.addActionListener(this);
+		menuElementOpenTicket.addActionListener(this);
+		menuElementViewTicket.addActionListener(this);
 
 	}
 
@@ -113,9 +115,9 @@ public class ticketsGUI implements ActionListener {
 
 		// create jmenu bar
 		JMenuBar bar = new JMenuBar();
-		bar.add(mnuFile); // add main menu items in order, to JMenuBar
-		bar.add(mnuAdmin);
-		bar.add(mnuTickets);
+		bar.add(menuFile); // add main menu items in order, to JMenuBar
+		bar.add(menuAdmin);
+		bar.add(menuTickets);
 		// add menu bar components to frame
 		mainFrame.setJMenuBar(bar);
 
@@ -140,13 +142,13 @@ public class ticketsGUI implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		// implement actions for sub menu items
-		if (e.getSource() == mnuItemExit) {
+		if (e.getSource() == menuElementExit) {
 			System.exit(0);
 			
-		} else if (e.getSource() == mnuItemOpenTicket) {
+		} else if (e.getSource() == menuElementOpenTicket) {
 			dao.createTicket();
 
-		} else if (e.getSource() == mnuItemViewTicket) {
+		} else if (e.getSource() == menuElementViewTicket) {
 
 			// retrieve ticket information for viewing in JTable
 
@@ -177,7 +179,7 @@ public class ticketsGUI implements ActionListener {
 					e1.printStackTrace();
 			}
 
-		} else if (e.getSource() == mnuItemUpdate)  {
+		} else if (e.getSource() == menuElementUpdate)  {
 			
 			String typeUpdate = null;
 			
@@ -191,7 +193,7 @@ public class ticketsGUI implements ActionListener {
 				else
 					JOptionPane.showMessageDialog(null, "Invalid Update Selection");
 				
-		} else if (e.getSource() == mnuItemDelete) {
+		} else if (e.getSource() == menuElementDelete) {
 			dao.deleteTicket();
 		}
 	} 
