@@ -109,8 +109,11 @@ public class ticketsGUI implements ActionListener {
 	private void prepareGUI(String verifyRole) {
 		// initialize frame object
 		mainFrame = new JFrame("Trouble Tickets  User: " + verifyRole);
+		
+		chkIfAdmin = verifyRole;
+		if (chkIfAdmin.equals("admin")) {
 
-		// create jmenu bar
+		// create admin jmenu bar
 		JMenuBar bar = new JMenuBar();
 		bar.add(menuFile); // add main menu object items in order, to JMenuBar
 		bar.add(menuAdmin);
@@ -129,6 +132,27 @@ public class ticketsGUI implements ActionListener {
 		mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
+		
+		} else {
+			// create user jmenu bar
+			JMenuBar bar = new JMenuBar();
+			bar.add(menuFile); // add main menu object items in order, to JMenuBar
+			bar.add(menuTickets);
+			// add menu bar components to frame
+			mainFrame.setJMenuBar(bar);
+
+			mainFrame.addWindowListener(new WindowAdapter() {
+				// define a window close operation
+				public void windowClosing(WindowEvent wE) {
+					System.exit(0);
+				}
+			});
+			// set frame options
+			mainFrame.setSize(1400, 400);
+			mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
+			mainFrame.setLocationRelativeTo(null);
+			mainFrame.setVisible(true);
+		}
 	}
 
 	/*
