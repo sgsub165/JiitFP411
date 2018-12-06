@@ -77,11 +77,6 @@ public class ticketsGUI implements ActionListener {
 		// add to File main menu object item
 		menuFile.add(menuObjectExit);
 
-		// initialize first sub menu object items for Admin main menu
-		menuObjectUpdate = new JMenuItem("Update Ticket");
-		// add to Admin main menu object item
-		menuAdmin.add(menuObjectUpdate);
-
 		// initialize second sub menu object items for Admin main menu
 		menuObjectDelete = new JMenuItem("Delete Ticket");
 		// add to Admin main menu object item
@@ -96,14 +91,18 @@ public class ticketsGUI implements ActionListener {
 		menuObjectViewTicket = new JMenuItem("View Ticket");
 		// add to Ticket Main menu object item
 		menuTickets.add(menuObjectViewTicket);
+		
+		// initialize first sub menu object items for Admin main menu
+		menuObjectUpdate = new JMenuItem("Update Ticket");
+		// add to Admin main menu object item
+		menuTickets.add(menuObjectUpdate);
 
 		/* Add action listeners for each desired menu object item */
 		menuObjectExit.addActionListener(this);
-		menuObjectUpdate.addActionListener(this);
 		menuObjectDelete.addActionListener(this);
 		menuObjectOpenTicket.addActionListener(this);
 		menuObjectViewTicket.addActionListener(this);
-
+		menuObjectUpdate.addActionListener(this);
 	}
 
 	private void prepareGUI(String verifyRole) {
