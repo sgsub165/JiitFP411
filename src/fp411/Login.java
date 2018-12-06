@@ -200,6 +200,7 @@ public class Login {
 		mainFrame.setVisible(true);
 	}
 
+	//main method of class
 	public static void main(String[] args) {
 		new Login();
 	}

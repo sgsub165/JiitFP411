@@ -30,27 +30,26 @@ import javax.swing.JTable;
  */
 public class ticketsGUI implements ActionListener {
 
-	// class level member objects
+	//define class level member objects
 
 	Dao dao = new Dao(); // object creation for CRUD operations
-	String chkIfAdmin = null;
+	String chkIfAdmin = null;	//variable to test for Admin login
 	private JFrame mainFrame;
+	static Statement stmnt = null;
 
 	JScrollPane sp = null;
 
-	// Main menu object items
+	//main menu object items
 	private JMenu menuFile = new JMenu("File");
 	private JMenu menuAdmin = new JMenu("Admin");
 	private JMenu menuTickets = new JMenu("Tickets");
 
-	// Sub menu item objects for all Main menu item objects
-	JMenuItem menuElementExit;
-	JMenuItem menuElementUpdate;
-	JMenuItem menuElementDelete;
-	JMenuItem menuElementOpenTicket;
-	JMenuItem menuElementViewTicket;
-
-	/* add any more Sub object items below */
+	//sub menu item objects for all Main menu item objects
+	JMenuItem menuObjectExit;
+	JMenuItem menuObjectUpdate;
+	JMenuItem menuObjectDelete;
+	JMenuItem menuObjectOpenTicket;
+	JMenuItem menuObjectViewTicket;
 
 	// constructor
 	public ticketsGUI(String verifyRole) {
@@ -66,56 +65,54 @@ public class ticketsGUI implements ActionListener {
 			} // fire up table creations (tickets / user
 								// tables)
 		createMenu();
-		prepareGUI();
+		prepareGUI(verifyRole);
 	}
 
 	private void createMenu() {
 
-		/* Initialize sub menu items **************************************/
+		/* Initialize sub menu object items */
 
-		// initialize sub menu item for File main menu
-		menuElementExit = new JMenuItem("Exit");
-		// add to File main menu item
-		menuFile.add(menuElementExit);
+		// initialize sub menu object item for File main menu
+		menuObjectExit = new JMenuItem("Exit");
+		// add to File main menu object item
+		menuFile.add(menuObjectExit);
 
-		// initialize first sub menu items for Admin main menu
-		menuElementUpdate = new JMenuItem("Update Ticket");
-		// add to Admin main menu item
-		menuAdmin.add(menuElementUpdate);
+		// initialize first sub menu object items for Admin main menu
+		menuObjectUpdate = new JMenuItem("Update Ticket");
+		// add to Admin main menu object item
+		menuAdmin.add(menuObjectUpdate);
 
-		// initialize second sub menu items for Admin main menu
-		menuElementDelete = new JMenuItem("Delete Ticket");
-		// add to Admin main menu item
-		menuAdmin.add(menuElementDelete);
+		// initialize second sub menu object items for Admin main menu
+		menuObjectDelete = new JMenuItem("Delete Ticket");
+		// add to Admin main menu object item
+		menuAdmin.add(menuObjectDelete);
 
-		// initialize first sub menu item for Tickets main menu
-		menuElementOpenTicket = new JMenuItem("Open Ticket");
-		// add to Ticket Main menu item
-		menuTickets.add(menuElementOpenTicket);
+		// initialize first sub menu object item for Tickets main menu
+		menuObjectOpenTicket = new JMenuItem("Open Ticket");
+		// add to Ticket Main menu object item
+		menuTickets.add(menuObjectOpenTicket);
 
-		// initialize second sub menu item for Tickets main menu
-		menuElementViewTicket = new JMenuItem("View Ticket");
-		// add to Ticket Main menu item
-		menuTickets.add(menuElementViewTicket);
+		// initialize second sub menu object item for Tickets main menu
+		menuObjectViewTicket = new JMenuItem("View Ticket");
+		// add to Ticket Main menu object item
+		menuTickets.add(menuObjectViewTicket);
 
-		// initialize any more desired sub menu items below
-
-		/* Add action listeners for each desired menu item *************/
-		menuElementExit.addActionListener(this);
-		menuElementUpdate.addActionListener(this);
-		menuElementDelete.addActionListener(this);
-		menuElementOpenTicket.addActionListener(this);
-		menuElementViewTicket.addActionListener(this);
+		/* Add action listeners for each desired menu object item */
+		menuObjectExit.addActionListener(this);
+		menuObjectUpdate.addActionListener(this);
+		menuObjectDelete.addActionListener(this);
+		menuObjectOpenTicket.addActionListener(this);
+		menuObjectViewTicket.addActionListener(this);
 
 	}
 
-	private void prepareGUI() {
+	private void prepareGUI(String verifyRole) {
 		// initialize frame object
-		mainFrame = new JFrame("Trouble Tickets");
+		mainFrame = new JFrame("Trouble Tickets  User: " + verifyRole);
 
 		// create jmenu bar
 		JMenuBar bar = new JMenuBar();
-		bar.add(menuFile); // add main menu items in order, to JMenuBar
+		bar.add(menuFile); // add main menu object items in order, to JMenuBar
 		bar.add(menuAdmin);
 		bar.add(menuTickets);
 		// add menu bar components to frame
@@ -135,28 +132,28 @@ public class ticketsGUI implements ActionListener {
 	}
 
 	/*
-	 * action listener fires up items clicked on from sub menus with one action
+	 * action listener invokes items clicked on from sub menus with one action
 	 * performed event handler!
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		// implement actions for sub menu items
-		if (e.getSource() == menuElementExit) {
+		// implement actions for sub menu object items
+		if (e.getSource() == menuObjectExit) {	//event to exit the gui session
 			System.exit(0);
 			
-		} else if (e.getSource() == menuElementOpenTicket) {
-			dao.createTicket();
+		} else if (e.getSource() == menuObjectOpenTicket) {		//event to create new tickets
+			dao.createTicket();			//call to createTicket method in dao class
 
-		} else if (e.getSource() == menuElementViewTicket) {
+		} else if (e.getSource() == menuObjectViewTicket) {		//event to view tickets
 
-			// retrieve ticket information for viewing in JTable
-
+			//retrieve ticket information for viewing in JTable
 			try {
 
-				Statement statement = Dao.getConnection().createStatement();
-
-				ResultSet results = statement.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, "
+				stmnt = Dao.getConnection().createStatement();	//connect to DB
+				
+				//sql select statement to produce the ticket table data for viewing in gui
+				ResultSet results = stmnt.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, "
 						+ "sgu.emp_full_name, sgt.dept_id, sgt.ticket_status_id, sgt.submit_date, "
 						+ "sgt.issue_description, estimate_fix_date, sgt.issue_resolution, "
 						+ "sgt.resolution_date, sgt.closed_description, sgt.closed_date "
@@ -171,30 +168,31 @@ public class ticketsGUI implements ActionListener {
 				jt.setBounds(50, 50, 300, 300);
 				sp = new JScrollPane(jt);
 				mainFrame.add(sp);
-				mainFrame.setVisible(true); // refreshes or repaints frame on
-											// screen
-				statement.close();  // close connections!!!
+				mainFrame.setVisible(true); // refreshes or repaints frame on screen
+				
+				stmnt.close();  // close connections
 
 			} catch (SQLException e1) {
 					e1.printStackTrace();
 			}
 
-		} else if (e.getSource() == menuElementUpdate)  {
+		} else if (e.getSource() == menuObjectUpdate)  {	//event to update tickets
 			
-			String typeUpdate = null;
+			String typeUpdate = null;		//define string variable for decision about what to update
 			
+			//ask user if they want to set ticket state to resolved or closed
 			typeUpdate = JOptionPane.showInputDialog(null, "Do you want to (R)esolve or (C)lose a ticket");
 			
-				if (typeUpdate.equalsIgnoreCase("R"))
-					dao.updateTicketResolved();
+				if (typeUpdate.equalsIgnoreCase("R"))	//if user wants to enter resolution data
+					dao.updateTicketResolved();			//select R to call the method to enter resolution data
 				else if
-					(typeUpdate.equalsIgnoreCase("C"))
+					(typeUpdate.equalsIgnoreCase("C"))	//select C to call the method to enter closure data
 					dao.updateTicketClosed();
 				else
-					JOptionPane.showMessageDialog(null, "Invalid Update Selection");
+					JOptionPane.showMessageDialog(null, "Invalid Update Selection");	//handle invalid input
 				
-		} else if (e.getSource() == menuElementDelete) {
-			dao.deleteTicket();
+		} else if (e.getSource() == menuObjectDelete) {		//event to delete ticket record from DB
+			dao.deleteTicket();								//with call to deleteTicket method in dao class
 		}
 	} 
 }

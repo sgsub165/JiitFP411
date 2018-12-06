@@ -73,7 +73,7 @@ public class Dao {
 				+ "ticket_status_id VARCHAR(10) NOT NULL, "
 				+ "submit_date DATETIME NOT NULL, "
 				+ "issue_description VARCHAR(512) NOT NULL, "
-				+ "estimate_fix_date DATE NULL, "
+				+ "estimate_fix_date DATE NOT NULL, "
 				+ "issue_resolution VARCHAR(256) NULL, "
 				+ "resolution_date DATETIME NULL, "
 				+ "closed_description VARCHAR(256) NULL, "
@@ -129,6 +129,9 @@ public class Dao {
 			}
 		} catch (Exception e) {
 			System.out.println("File Load Error!!!\nPlease check file existence and integrity.");
+			JOptionPane.showMessageDialog(null, "File Load Error!\nPlease check file existence and integrity");
+			JOptionPane.showMessageDialog(null, "Program will now exit");
+			System.exit(0);
 		}
 
 		try {
@@ -257,7 +260,6 @@ public class Dao {
 		} catch (SQLException ex) {
 				ex.printStackTrace();
 		}
-		readTicket();
 	}
 	
 	//method to read ticket... unfortunately I cannot figure out how to do this at this time.
@@ -342,13 +344,21 @@ public class Dao {
 		stmnt = getConnection().createStatement();
 		prepedStmnt = cnct.prepareStatement(updateTableSQL);
 		prepedStmnt.setInt(1, Integer.parseInt(deletedTicketID));
+		
+		int response = JOptionPane.showConfirmDialog(null, 
+			"Are you sure you want to delete ticket #" + deletedTicketID + "?",
+			"Confirm Deletion", JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE);
+		if(response == JOptionPane.NO_OPTION) {
+			System.out.println("No record deleted");
+		} else if(response == JOptionPane.YES_OPTION) {
 
 		// execute the update SQL statement
 		prepedStmnt.executeUpdate();
 
 			System.out.println("Trouble Ticket has been Deleted");
 			JOptionPane.showMessageDialog(null, "Ticket id: " + deletedTicketID + " is Deleted");
-			
+		}
 			stmnt.close();
 
 		} catch (SQLException e) {
