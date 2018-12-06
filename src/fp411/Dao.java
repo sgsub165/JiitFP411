@@ -90,12 +90,16 @@ public class Dao {
 
 			stmnt.executeUpdate(createTicketStatusTable);
 			System.out.println("\tSuccessfully created Ticket Status table in Trouble Ticket database.");
+			JOptionPane.showMessageDialog(null, "Ticket Status Table Created");
 			stmnt.executeUpdate(createDeptTable);
 			System.out.println("\tSuccessfully created Department table in Trouble Ticket database.");
+			JOptionPane.showMessageDialog(null, "Departments Table Created");
 			stmnt.executeUpdate(createUsersTable);
 			System.out.println("\tSuccessfully created Users table in Trouble Ticket database.");
+			JOptionPane.showMessageDialog(null, "Users Table Created");
 			stmnt.executeUpdate(createTicketsTable);
 			System.out.println("\tSuccessfully created Tickets table in Trouble Ticket database.");
+			JOptionPane.showMessageDialog(null, "Tickets Table Created");
 			System.out.println("Tables have been created and ready for data insertion.");
 
 			// end create table
@@ -155,6 +159,7 @@ public class Dao {
 				stmnt.executeUpdate(sql);
 			}
 			System.out.println("\tUser inserts completed in the Trouble Ticket database.");
+			JOptionPane.showMessageDialog(null, "Users have been inserted into Users table");
 
 			// close statement object
 			stmnt.close();
@@ -185,6 +190,7 @@ public class Dao {
 			stmnt.executeUpdate(sql);
 			
 			System.out.println("\tDepartment inserts completed in the Trouble Ticket database.");
+			JOptionPane.showMessageDialog(null, "Departments have been inserted into Dept table");
 			
 			stmnt.close();
 			
@@ -211,7 +217,7 @@ public class Dao {
 			stmnt.executeUpdate(sql);
 			
 			System.out.println("\tTicket Status inserts completed in the Trouble Ticket database.");
-			
+			JOptionPane.showMessageDialog(null, "Ticket Status types have been inserted into Status table");
 			stmnt.close();
 			
 		} catch (SQLException e) {
