@@ -78,7 +78,7 @@ public class ticketsGUI implements ActionListener {
 		// add to File main menu object item
 		menuFile.add(menuObjectExit);
 
-		// initialize second sub menu object items for Admin main menu
+		// initialize first sub menu object items for Admin main menu
 		menuObjectDelete = new JMenuItem("Delete Ticket");
 		// add to Admin main menu object item
 		menuAdmin.add(menuObjectDelete);
@@ -93,9 +93,9 @@ public class ticketsGUI implements ActionListener {
 		// add to Ticket Main menu object item
 		menuTickets.add(menuObjectViewTicket);
 		
-		// initialize first sub menu object items for Admin main menu
+		// initialize third sub menu object items for Tickets main menu
 		menuObjectUpdate = new JMenuItem("Update Ticket");
-		// add to Admin main menu object item
+		// add to Ticket main menu object item
 		menuTickets.add(menuObjectUpdate);
 
 		/* Add action listeners for each desired menu object item */

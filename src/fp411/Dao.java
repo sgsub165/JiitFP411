@@ -136,7 +136,6 @@ public class Dao {
 			JOptionPane.showMessageDialog(null, "File Load Error!\nPlease check file existence and integrity");
 			JOptionPane.showMessageDialog(null, "Program will now exit");
 			System.exit(0);
-		
 		}
 
 		try {
@@ -267,11 +266,6 @@ public class Dao {
 		} catch (SQLException ex) {
 				ex.printStackTrace();
 		}
-	}
-	
-	//method to read ticket... unfortunately I cannot figure out how to do this at this time.
-	public void readTicket() {
-		
 	}
 	
 	//method to update the tickets table for information about the resolution of the original issue
