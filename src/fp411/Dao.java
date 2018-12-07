@@ -136,6 +136,7 @@ public class Dao {
 			JOptionPane.showMessageDialog(null, "File Load Error!\nPlease check file existence and integrity");
 			JOptionPane.showMessageDialog(null, "Program will now exit");
 			System.exit(0);
+		
 		}
 
 		try {
@@ -335,6 +336,37 @@ public class Dao {
 			System.out.println(e.getMessage());
 		} 		
 	}
+	
+	public void modifyTicket() {
+		
+		try {
+
+		//prompt user for closure information to update the tickets table	
+		String modifyTicketID = JOptionPane.showInputDialog(null, "Enter Ticket ID to modify description");
+		String modifyDescription = JOptionPane.showInputDialog(null, "Enter the new issue description for update");
+
+		String updateTableSQL = "UPDATE s_grif_tickets SET issue_description = ? WHERE ticket_id = ?";
+		
+		//establish connection to DB and update the variables for prepared statements
+		stmnt = getConnection().createStatement();
+		prepedStmnt = cnct.prepareStatement(updateTableSQL);
+		prepedStmnt.setString(1, modifyDescription);
+		prepedStmnt.setInt(2, Integer.parseInt(modifyTicketID));
+
+		// execute the update SQL statement
+		prepedStmnt.executeUpdate();
+
+			System.out.println("Trouble Ticket has been updated");
+			JOptionPane.showMessageDialog(null, "Ticket id: " + modifyTicketID + " updated");
+			
+			stmnt.close();
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+		} 		
+	}
+	
 	
 	//method to delete tickets from the database
 	public void deleteTicket() {	

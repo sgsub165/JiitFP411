@@ -59,6 +59,7 @@ public class ticketsGUI implements ActionListener {
 		if (chkIfAdmin.equals("Admin"))
 			try {
 				dao.createTables();
+				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -151,6 +152,7 @@ public class ticketsGUI implements ActionListener {
 			mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
 			mainFrame.setLocationRelativeTo(null);
 			mainFrame.setVisible(true);
+			refreshTable();
 		}
 	}
 
@@ -167,55 +169,66 @@ public class ticketsGUI implements ActionListener {
 			
 		} else if (e.getSource() == menuObjectOpenTicket) {		//event to create new tickets
 			dao.createTicket();			//call to createTicket method in dao class
-
+			refreshTable();
+			
 		} else if (e.getSource() == menuObjectViewTicket) {		//event to view tickets
-
-			//retrieve ticket information for viewing in JTable
-			try {
-
-				stmnt = Dao.getConnection().createStatement();	//connect to DB
-				
-				//sql select statement to produce the ticket table data for viewing in gui
-				ResultSet results = stmnt.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, "
-						+ "sgu.emp_full_name, sgt.dept_id, sgt.ticket_status_id, sgt.submit_date, "
-						+ "sgt.issue_description, estimate_fix_date, sgt.issue_resolution, "
-						+ "sgt.resolution_date, sgt.closed_description, sgt.closed_date "
-						+ "FROM s_grif_tickets sgt "
-						+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id "
-						+ "ORDER BY sgt.ticket_id");
-						
-				// Use JTable built in functionality to build a table model and
-				// display the table model off your result set!!!
-				JTable jt = new JTable(ticketsJTable.buildTableModel(results));
-
-				jt.setBounds(50, 50, 300, 300);
-				sp = new JScrollPane(jt);
-				mainFrame.add(sp);
-				mainFrame.setVisible(true); // refreshes or repaints frame on screen
-				
-				stmnt.close();  // close connections
-
-			} catch (SQLException e1) {
-					e1.printStackTrace();
-			}
+			refreshTable();
 
 		} else if (e.getSource() == menuObjectUpdate)  {	//event to update tickets
 			
 			String typeUpdate = null;		//define string variable for decision about what to update
-			
+
 			//ask user if they want to set ticket state to resolved or closed
-			typeUpdate = JOptionPane.showInputDialog(null, "Do you want to (R)esolve or (C)lose a ticket");
+			typeUpdate = JOptionPane.showInputDialog(null, "Do you want to (R)esolve or (C)lose or (M)odify a Ticket");
 			
-				if (typeUpdate.equalsIgnoreCase("R"))	//if user wants to enter resolution data
-					dao.updateTicketResolved();			//select R to call the method to enter resolution data
-				else if
-					(typeUpdate.equalsIgnoreCase("C"))	//select C to call the method to enter closure data
+				if (typeUpdate.equalsIgnoreCase("R")) {	//select R to call the method to enter resolution data
+					dao.updateTicketResolved();
+					refreshTable();
+				} else if
+					(typeUpdate.equalsIgnoreCase("C")) { //select C to call the method to enter closure data
 					dao.updateTicketClosed();
-				else
+					refreshTable();
+				} else if
+					(typeUpdate.equalsIgnoreCase("M")) {	//select M to call the method to modify ticket data
+					dao.modifyTicket();
+					refreshTable();
+				} else
 					JOptionPane.showMessageDialog(null, "Invalid Update Selection");	//handle invalid input
 				
 		} else if (e.getSource() == menuObjectDelete) {		//event to delete ticket record from DB
 			dao.deleteTicket();								//with call to deleteTicket method in dao class
+			refreshTable();
 		}
-	} 
+	}
+	
+	public void refreshTable() {
+		//retrieve ticket information for viewing in JTable
+		try {
+
+			stmnt = Dao.getConnection().createStatement();	//connect to DB
+			
+			//sql select statement to produce the ticket table data for viewing in gui
+			ResultSet results = stmnt.executeQuery("SELECT sgt.ticket_id, sgt.emp_user_id, "
+					+ "sgu.emp_full_name, sgt.dept_id, sgt.ticket_status_id, sgt.submit_date, "
+					+ "sgt.issue_description, estimate_fix_date, sgt.issue_resolution, "
+					+ "sgt.resolution_date, sgt.closed_description, sgt.closed_date "
+					+ "FROM s_grif_tickets sgt "
+					+ "INNER JOIN s_grif_users sgu ON sgt.emp_user_id = sgu.emp_user_id "
+					+ "ORDER BY sgt.ticket_id");
+					
+			// Use JTable built in functionality to build a table model and
+			// display the table model off your result set!!!
+			JTable jt = new JTable(ticketsJTable.buildTableModel(results));
+
+			jt.setBounds(50, 50, 300, 300);
+			sp = new JScrollPane(jt);
+			mainFrame.add(sp);
+			mainFrame.setVisible(true); // refreshes or repaints frame on screen
+			
+			stmnt.close();  // close connections
+
+		} catch (SQLException e1) {
+				e1.printStackTrace();
+		}
+	}
 }

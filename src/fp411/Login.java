@@ -94,7 +94,7 @@ public class Login {
 		userText = new JTextField(6);
 		pwdText = new JPasswordField(6);
 
-		loginButton = new JButton("Login");
+		loginButton = new JButton("              Login                ");
 		loginButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -113,12 +113,12 @@ public class Login {
 				// convert characters from password field to string for input validation
 				String password = new String(pwdText.getPassword());
 				boolean adminFlag = false;		//initialize admin flag
-				
+
 				if (userId.equals("admin") && password.equals("admin1")) {
 					adminFlag = true;
 					//ask the admin user if they want to create tables to init the DB or simply create tickets in the established DB
 					adminTasks = JOptionPane.showInputDialog(null, "Do you want to (C)reate tables or (T)ickets?");
-					
+
 					try {
 						
 						// establish role as admin via constructor call
@@ -142,7 +142,6 @@ public class Login {
 				} else 
 				// close Login window
 				mainFrame.dispose();
-						
 
 				/*
 				 * match credentials from text fields with users table for a
@@ -187,11 +186,11 @@ public class Login {
 							connect.close();
 						} catch (SQLException e1) {
 							e1.printStackTrace();
-						}	//catch end
-					}	//finally end
-				}	//if adminflag end
-			}	//method ap end
-		});	//class end
+						}
+					}
+				}
+			}
+		});
 		// add layout type /background color to control panel
 		controlPanel.setLayout(new FlowLayout());
 		controlPanel.setBackground(Color.yellow);
