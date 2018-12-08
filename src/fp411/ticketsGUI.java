@@ -59,6 +59,9 @@ public class ticketsGUI implements ActionListener {
 		if (chkIfAdmin.equals("Admin"))
 			try {
 				dao.createTables();
+				dao.addUsers();
+				dao.addDepts();
+				dao.addTicketStatus();
 				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -111,7 +114,7 @@ public class ticketsGUI implements ActionListener {
 		mainFrame = new JFrame("Trouble Tickets  User: " + verifyRole);
 		
 		chkIfAdmin = verifyRole;
-		if (chkIfAdmin.equals("admin")) {
+		if (chkIfAdmin.equals("Admin")) {
 
 		// create admin jmenu bar
 		JMenuBar bar = new JMenuBar();
