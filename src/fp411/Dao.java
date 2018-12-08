@@ -38,8 +38,8 @@ public class Dao {
 		// Setup the connection with the DB
 		try {		//try/catch block for connection to database
 			cnct = DriverManager
-					.getConnection("jdbc:mysql://localhost:3306/FP411?autoReconnect=true&useSSL=false"
-							+ "&user=sgriffit&password=sgriffit1");
+					.getConnection("jdbc:mysql://www.papademas.net:3307/tickets?autoReconnect=true&useSSL=false"
+							+ "&user=fp411&password=411");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
