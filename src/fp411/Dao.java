@@ -37,9 +37,15 @@ public class Dao {
 	public static Connection getConnection() {  //sql database connection method
 		// Setup the connection with the DB
 		try {		//try/catch block for connection to database
+//			cnct = DriverManager
+//					.getConnection("jdbc:mysql://www.papademas.net:3307/tickets?autoReconnect=true&useSSL=false"
+//							+ "&user=fp411&password=411");
+			
 			cnct = DriverManager
-					.getConnection("jdbc:mysql://www.papademas.net:3307/tickets?autoReconnect=true&useSSL=false"
-							+ "&user=fp411&password=411");
+					.getConnection("jdbc:mysql://localhost:3306/FP411?autoReconnect=true&useSSL=false"
+							+ "&user=sgriffit&password=sgriffit1");
+							
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -393,5 +399,35 @@ public class Dao {
 
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public void metrics() {
+		
+		try {
+			stmnt = getConnection().createStatement();		//set up the DB connection
+			
+			System.out.println("\nGathering metrics data for trouble tickets...");
+			
+			//sql statements to insert elements and execute the sql statements
+			sql = "SELECT * FROM fp411.s_grif_tickets ORDER BY emp_user_id;";
+			stmnt.executeQuery(sql);
+			sql = "SELECT * FROM fp411.s_grif_tickets ORDER BY ticket_status_id";
+			stmnt.executeQuery(sql);
+			sql = "SELECT ticket_status_id AS TICKET_STATE, count(*) AS COUNT FROM fp411.s_grif_tickets GROUP BY ticket_status_id;";
+			stmnt.executeQuery(sql);
+//			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('TEST')";
+//			stmnt.executeUpdate(sql);
+//			sql = "INSERT INTO s_grif_depts(dept_id)" + "VALUES('HR')";
+//			stmnt.executeUpdate(sql);
+			
+			System.out.println("Trouble Ticket metrics have been generated.");
+			JOptionPane.showMessageDialog(null, "Trouble Ticket metrics have been generated.");
+			
+			stmnt.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 }

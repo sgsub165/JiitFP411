@@ -35,6 +35,7 @@ public class ticketsGUI implements ActionListener {
 	Dao dao = new Dao(); // object creation for CRUD operations
 	String chkIfAdmin = null;	//variable to test for Admin login
 	private JFrame mainFrame;
+	private JFrame metricFrame;
 	static Statement stmnt = null;
 
 	JScrollPane sp = null;
@@ -50,6 +51,7 @@ public class ticketsGUI implements ActionListener {
 	JMenuItem menuObjectDelete;
 	JMenuItem menuObjectOpenTicket;
 	JMenuItem menuObjectViewTicket;
+	JMenuItem menuObjectViewMetrics;
 
 	// constructor
 	public ticketsGUI(String verifyRole) {
@@ -70,7 +72,6 @@ public class ticketsGUI implements ActionListener {
 		}
 			else {
 				createMenu();
-				System.out.printf("prior to prepGUI", verifyRole);
 				prepareGUI(verifyRole);
 				
 			}
@@ -89,6 +90,11 @@ public class ticketsGUI implements ActionListener {
 		menuObjectDelete = new JMenuItem("Delete Ticket");
 		// add to Admin main menu object item
 		menuAdmin.add(menuObjectDelete);
+		
+		// initialize first sub menu object items for Admin main menu
+		menuObjectViewMetrics = new JMenuItem("View Metrics");
+		// add to Admin main menu object item
+		menuAdmin.add(menuObjectViewMetrics);
 
 		// initialize first sub menu object item for Tickets main menu
 		menuObjectOpenTicket = new JMenuItem("Open Ticket");
@@ -108,6 +114,7 @@ public class ticketsGUI implements ActionListener {
 		/* Add action listeners for each desired menu object item */
 		menuObjectExit.addActionListener(this);
 		menuObjectDelete.addActionListener(this);
+		menuObjectViewMetrics.addActionListener(this);
 		menuObjectOpenTicket.addActionListener(this);
 		menuObjectViewTicket.addActionListener(this);
 		menuObjectUpdate.addActionListener(this);
@@ -118,7 +125,6 @@ public class ticketsGUI implements ActionListener {
 		mainFrame = new JFrame("Trouble Tickets  User: " + verifyRole);
 		
 		chkIfAdmin = verifyRole;
-		System.out.printf("\nduring prepGUI", verifyRole);
 		if (chkIfAdmin.equals("admin")) {
 
 		// create admin jmenu bar
@@ -207,6 +213,8 @@ public class ticketsGUI implements ActionListener {
 		} else if (e.getSource() == menuObjectDelete) {		//event to delete ticket record from DB
 			dao.deleteTicket();								//with call to deleteTicket method in dao class
 			refreshTable();
+		} else if (e.getSource() == menuObjectViewMetrics) {
+			metrics();
 		}
 	}
 	
@@ -239,5 +247,50 @@ public class ticketsGUI implements ActionListener {
 		} catch (SQLException e1) {
 				e1.printStackTrace();
 		}
+	}
+	
+	public void metrics() {
+		
+		metricFrame = new JFrame("Trouble Tickets Metrics");
+				
+		try {
+			stmnt = Dao.getConnection().createStatement();		//set up the DB connection
+			
+			System.out.println("\nGathering metrics data for trouble tickets...");
+			
+			ResultSet metrics = stmnt.executeQuery("SELECT ticket_status_id, count(*) AS Count FROM fp411.s_grif_tickets GROUP BY ticket_status_id;");
+			
+			// Use JTable built in functionality to build a table model and
+			// display the table model off your result set!!!
+			JTable jt = new JTable(ticketsJTable.buildTableModel(metrics));
+			
+			// set frame options
+			metricFrame.setSize(400, 400);
+			metricFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
+			metricFrame.setLocationRelativeTo(null);
+			metricFrame.setVisible(true);
+
+			jt.setBounds(50, 50, 300, 300);
+			sp = new JScrollPane(jt);
+			metricFrame.add(sp);
+			metricFrame.setVisible(true); // refreshes or repaints frame on screen
+			
+//			//sql statements to insert elements and execute the sql statements
+//			sql = "SELECT * FROM fp411.s_grif_tickets ORDER BY emp_user_id;";
+//			stmnt.executeQuery(sql);
+//			sql = "SELECT * FROM fp411.s_grif_tickets ORDER BY ticket_status_id";
+//			stmnt.executeQuery(sql);
+//			sql = "SELECT ticket_status_id AS TICKET_STATE, count(*) AS COUNT FROM fp411.s_grif_tickets GROUP BY ticket_status_id;";
+//			stmnt.executeQuery(sql);
+			
+			System.out.println("Trouble Ticket metrics have been generated.");
+			JOptionPane.showMessageDialog(null, "Trouble Ticket metrics have been generated.");
+			
+			stmnt.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 	}
 }
