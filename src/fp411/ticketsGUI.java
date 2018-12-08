@@ -56,21 +56,25 @@ public class ticketsGUI implements ActionListener {
 
 		chkIfAdmin = verifyRole; 
 		JOptionPane.showMessageDialog(null, "Welcome " + verifyRole + " to the Trouble Ticket System");
-		if (chkIfAdmin.equals("Admin"))
+		if (chkIfAdmin.equals("Admin")) {
 			try {
-				dao.createTables();
-				dao.addUsers();
-				dao.addDepts();
-				dao.addTicketStatus();
-				
+				dao.createTables();	//create depts, tickets, ticketstatus, users tables
+				dao.addUsers();		//insert users into table
+				dao.addDepts();		//insert depts into table
+				dao.addTicketStatus();	//insert ticketstatus into table
+				JOptionPane.showMessageDialog(null, "Database tables have been created\nPlease login to TTMS to continue");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} // fire up table creations (tickets / user
-								// tables)
-		createMenu();
-		prepareGUI(verifyRole);
-	}
+			}
+		}
+			else {
+				createMenu();
+				System.out.printf("prior to prepGUI", verifyRole);
+				prepareGUI(verifyRole);
+				
+			}
+		}
 
 	private void createMenu() {
 
@@ -114,7 +118,8 @@ public class ticketsGUI implements ActionListener {
 		mainFrame = new JFrame("Trouble Tickets  User: " + verifyRole);
 		
 		chkIfAdmin = verifyRole;
-		if (chkIfAdmin.equals("Admin")) {
+		System.out.printf("\nduring prepGUI", verifyRole);
+		if (chkIfAdmin.equals("admin")) {
 
 		// create admin jmenu bar
 		JMenuBar bar = new JMenuBar();
@@ -135,6 +140,7 @@ public class ticketsGUI implements ActionListener {
 		mainFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
+		refreshTable();
 		
 		} else {
 			// create user jmenu bar

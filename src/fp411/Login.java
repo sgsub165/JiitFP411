@@ -53,7 +53,7 @@ public class Login {
 		showTextFields();
 	}
 	//method to create the GUI elements
-	private void prepareGUI() {
+	public void prepareGUI() {
 
 		//instantiate jframe and jpanel objects
 		mainFrame = new JFrame("User Login"); // title of window form
@@ -149,7 +149,7 @@ public class Login {
 				 */
 					if (!adminFlag) {
 				
-					Connection connect = Dao.getConnection();		//connect to DB
+					Connection cnct = Dao.getConnection();		//connect to DB
 					//sql select statement to check for user/pswd match
 				    String selectStatement = "SELECT emp_user_id, emp_passwrd FROM s_grif_users where emp_user_id=? and emp_passwrd=?";
 					PreparedStatement prepstmnt;
@@ -157,7 +157,7 @@ public class Login {
 					
 					try {
 						//set up prepared statements to execute query string
-						prepstmnt = (PreparedStatement) connect.prepareStatement(selectStatement);
+						prepstmnt = (PreparedStatement) cnct.prepareStatement(selectStatement);
 						prepstmnt.setString(1, userId);
 						prepstmnt.setString(2, password);
 						results = prepstmnt.executeQuery();
@@ -183,7 +183,7 @@ public class Login {
 							e1.printStackTrace();
 						}
 						try {
-							connect.close();
+							cnct.close();
 						} catch (SQLException e1) {
 							e1.printStackTrace();
 						}

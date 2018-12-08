@@ -109,10 +109,6 @@ public class Dao {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		// method calls to add users, departments and ticket status elements to the respective tables
-//		addUsers();
-//		addDepts();
-//		addTicketStatus();
 	}
 	
 	//method to add the user data from the .csv file into the DB user table
