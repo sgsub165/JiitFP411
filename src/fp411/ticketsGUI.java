@@ -248,24 +248,48 @@ public class ticketsGUI implements ActionListener {
 				e1.printStackTrace();
 		}
 	}
-	
+	//This method is used to generate the ticket metrics reports.
 	public void metrics() {
-		
-		metricFrame = new JFrame("Trouble Tickets Metrics");
+		metricFrame = new JFrame("Trouble Tickets Metrics");	//define JFrame
 				
 		try {
 			stmnt = Dao.getConnection().createStatement();		//set up the DB connection
 			
 			System.out.println("\nGathering metrics data for trouble tickets...");
 			
-			ResultSet metrics = stmnt.executeQuery("SELECT ticket_status_id, count(*) AS Count FROM fp411.s_grif_tickets GROUP BY ticket_status_id;");
+			//define the choices for metric items assigned to string input
+			String input = JOptionPane.showInputDialog(null, "Choose 1 for Count Tickets by Status"
+					+ "\nChoose 2 for Report Tickets by Status\nChoose 3 for Report Tickets by User"
+					+ "\nChoose 4 for Report Late Tickets");
 			
+			int choice;	//define choice
+			
+			try {
+			choice = Integer.parseInt(input)-1;	//set choice to to zero base of input
+			
+			} catch (Exception e) {
+				return;
+			}
+			if (choice > 3 && choice < 0)  //define choice range of ints
+				return;
+			
+			String[] metrics = {	//set up a string array for SQL query statements
+					"SELECT ticket_status_id, count(*) AS Count FROM s_grif_tickets GROUP BY ticket_status_id;",
+					"SELECT ticket_id, emp_user_id, ticket_status_id, submit_date, estimate_fix_date, resolution_date, closed_date"
+					+ " FROM s_grif_tickets ORDER BY ticket_status_id;",
+					"SELECT ticket_id, emp_user_id, ticket_status_id, submit_date, estimate_fix_date, resolution_date, closed_date"
+					+ " FROM s_grif_tickets ORDER BY emp_user_id;",
+					"SELECT ticket_id, emp_user_id, ticket_status_id, submit_date, estimate_fix_date"
+					+ " FROM s_grif_tickets WHERE estimate_fix_date < now() AND resolution_date IS NULL;"
+			};
+			
+			ResultSet metric = stmnt.executeQuery(metrics[choice]);	//execute the subs of the array to query
 			// Use JTable built in functionality to build a table model and
-			// display the table model off your result set!!!
-			JTable jt = new JTable(ticketsJTable.buildTableModel(metrics));
+			// display the table model off result set.
+			JTable jt = new JTable(ticketsJTable.buildTableModel(metric));
 			
 			// set frame options
-			metricFrame.setSize(400, 400);
+			metricFrame.setSize(600, 400);
 			metricFrame.getContentPane().setBackground(Color.LIGHT_GRAY);
 			metricFrame.setLocationRelativeTo(null);
 			metricFrame.setVisible(true);
@@ -274,14 +298,6 @@ public class ticketsGUI implements ActionListener {
 			sp = new JScrollPane(jt);
 			metricFrame.add(sp);
 			metricFrame.setVisible(true); // refreshes or repaints frame on screen
-			
-//			//sql statements to insert elements and execute the sql statements
-//			sql = "SELECT * FROM fp411.s_grif_tickets ORDER BY emp_user_id;";
-//			stmnt.executeQuery(sql);
-//			sql = "SELECT * FROM fp411.s_grif_tickets ORDER BY ticket_status_id";
-//			stmnt.executeQuery(sql);
-//			sql = "SELECT ticket_status_id AS TICKET_STATE, count(*) AS COUNT FROM fp411.s_grif_tickets GROUP BY ticket_status_id;";
-//			stmnt.executeQuery(sql);
 			
 			System.out.println("Trouble Ticket metrics have been generated.");
 			JOptionPane.showMessageDialog(null, "Trouble Ticket metrics have been generated.");
